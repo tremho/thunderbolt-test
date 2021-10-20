@@ -41,10 +41,11 @@ export async function testRemote(t:any, action:string, description:string, expec
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
  * @param action The directive to perform
- * @returns {any} The result of the action
+ * @returns {string} The JSON result of the action, Stringified
  */
 export async function callRemote(action:string) {
-    return await puppetTest(action)
+    const raw = await puppetTest(action)
+    return JSON.stringify(raw)
 }
 /**
  * Should be called at the top of a test suite
