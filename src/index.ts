@@ -9,6 +9,7 @@ let count = 0;
 async function puppetTest(action:string):Promise<string> {
     return new Promise(resolve => {
         setActionCallback(action, (res:string) => {
+            console.log('puppet Test returns ', res)
             let n = res.indexOf(':')
             let rcount = Number(res.substring(0, n))
             res = res.substring(n+1)
