@@ -1,11 +1,11 @@
 {
   "name": "@tremho/jove-test",
-  "version": "0.6.9-pre-release.3",
+  "version": "0.6.9-pre-release.5",
   "description": "Test API Module for Jove Framework",
   "main": "build/index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "prepublish": "npm run build && npm run typings",
+    "prepublish": "npm run build",
     "clean": "rm -fr build node_modules && npm install",
     "build": "tsc",
     "typings": "tsc -d src/index.ts --declarationDir dtypes --target ES2015 --esModuleInterop true --module commonjs",

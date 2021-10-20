@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runRemoteTest = exports.endTest = exports.startTest = exports.testRemote = void 0;
+exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const H2Server_1 = require("./H2Server");
 let desc, r, x;
@@ -52,6 +52,18 @@ function testRemote(t, action, description, expected) {
 }
 exports.testRemote = testRemote;
 /**
+ * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
+ *
+ * @param action The directive to perform
+ * @returns {any} The result of the action
+ */
+function callRemote(action) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield puppetTest(action);
+    });
+}
+exports.callRemote = callRemote;
+/**
  * Should be called at the top of a test suite
  * It really only serves to synchronize subsequent test/returns, and can theoretically be called after the start also.
  * @param t The tap instance
@@ -61,7 +73,8 @@ function startTest(t) {
         desc = 'first connect';
         r = yield puppetTest('start');
         x = '';
-        t.ok(r === x, desc + ` expected ${x}, got ${r}`);
+        const ok = r === x;
+        t.ok(ok, desc + ok ? ' successful' : ' FAILED');
     });
 }
 exports.startTest = startTest;

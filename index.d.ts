@@ -10,6 +10,14 @@ declare module "@tremho/jove-common" {
     export declare function testRemote(t: any, action: string, description: string, expected: any): Promise<void>;
 
     /**
+     * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
+     *
+     * @param action The directive to perform
+     * @returns {any} The result of the action
+     */
+    export declare function callRemote(action:string) : Promise<void>;
+
+    /**
      * Should be called at the top of a test suite
      * It really only serves to synchronize subsequent test/returns, and can theoretically be called after the start also.
      * @param t The tap instance
