@@ -15,7 +15,15 @@ async function puppetTest(action:string):Promise<string> {
             res = res.substring(n+1)
             const parts = res.split('=')
             const ract = (parts[0] || '').trim()
-            const ans = (parts[1] || '').trim()
+            let ans = (parts[1] || '').trim()
+
+            if(ans.charAt(0) === "{" || ans.charAt(0) === '[') {
+                try {
+                    ans = JSON.parse(ans)
+                } catch(e) {
+                    console.warn('unexpected parse result from jove-test return', ans)
+                }
+            }
 
             if(ract === action.trim()) {
                 resolve(ans)
