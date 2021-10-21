@@ -21,12 +21,21 @@ function puppetTest(action) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => {
             H2Server_1.setActionCallback(action, (res) => {
+                console.log('puppet Test returns ', res);
                 let n = res.indexOf(':');
                 let rcount = Number(res.substring(0, n));
                 res = res.substring(n + 1);
                 const parts = res.split('=');
                 const ract = (parts[0] || '').trim();
-                const ans = (parts[1] || '').trim();
+                let ans = (parts[1] || '').trim();
+                if (ans.charAt(0) === "{" || ans.charAt(0) === '[') {
+                    try {
+                        ans = JSON.parse(ans);
+                    }
+                    catch (e) {
+                        console.warn('unexpected parse result from jove-test return', ans);
+                    }
+                }
                 if (ract === action.trim()) {
                     resolve(ans);
                 }
@@ -55,11 +64,17 @@ exports.testRemote = testRemote;
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
  * @param action The directive to perform
- * @returns {any} The result of the action
+ * @returns {string} The JSON result of the action, Stringified
  */
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield puppetTest(action);
+        console.log('callRemote', action);
+        const raw = yield puppetTest(action);
+        return raw;
+        // console.log('raw', raw)
+        // const str =  JSON.stringify(raw)
+        // console.log('stringified', str)
+        // return str
     });
 }
 exports.callRemote = callRemote;
