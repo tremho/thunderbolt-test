@@ -47,10 +47,11 @@ export async function testRemote(t:any, action:string, description:string, expec
 export async function callRemote(action:string) {
     console.log('callRemote', action)
     const raw = await puppetTest(action)
-    console.log('raw', raw)
-    const str =  JSON.stringify(raw)
-    console.log('stringified', str)
-    return str
+    return raw
+    // console.log('raw', raw)
+    // const str =  JSON.stringify(raw)
+    // console.log('stringified', str)
+    // return str
 }
 /**
  * Should be called at the top of a test suite
