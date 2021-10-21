@@ -21,7 +21,6 @@ function puppetTest(action) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => {
             H2Server_1.setActionCallback(action, (res) => {
-                console.log('puppet Test returns ', res);
                 let n = res.indexOf(':');
                 let rcount = Number(res.substring(0, n));
                 res = res.substring(n + 1);
@@ -69,12 +68,7 @@ exports.testRemote = testRemote;
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('callRemote', action);
-        const raw = yield puppetTest(action);
-        return raw;
-        // console.log('raw', raw)
-        // const str =  JSON.stringify(raw)
-        // console.log('stringified', str)
-        // return str
+        return yield puppetTest(action);
     });
 }
 exports.callRemote = callRemote;
@@ -115,7 +109,7 @@ function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         const stream = new H2Server_1.H2Server();
         stream.listen();
-        return tap_1.default.test('Proof of concept walk-thru', t => {
+        return tap_1.default.test(title, t => {
             return H2Server_1.waitToConnect().then(() => {
                 return testFunc(t);
             });
