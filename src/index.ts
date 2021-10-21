@@ -9,7 +9,6 @@ let count = 0;
 async function puppetTest(action:string):Promise<string> {
     return new Promise(resolve => {
         setActionCallback(action, (res:string) => {
-            console.log('puppet Test returns ', res)
             let n = res.indexOf(':')
             let rcount = Number(res.substring(0, n))
             res = res.substring(n+1)
@@ -54,12 +53,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  */
 export async function callRemote(action:string) {
     console.log('callRemote', action)
-    const raw = await puppetTest(action)
-    return raw
-    // console.log('raw', raw)
-    // const str =  JSON.stringify(raw)
-    // console.log('stringified', str)
-    // return str
+    return  await puppetTest(action)
 }
 /**
  * Should be called at the top of a test suite
@@ -94,7 +88,7 @@ export async function endTest(t:any) {
 export async function runRemoteTest(title:string, testFunc:any) {
     const stream = new H2Server()
     stream.listen()
-    return Tap.test('Proof of concept walk-thru', t => {
+    return Tap.test(title, t => {
         return waitToConnect().then(() => {
             return testFunc(t)
         })
