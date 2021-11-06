@@ -12,85 +12,93 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runRemoteTest = exports.endTest = exports.startTest = exports.testRemote = void 0;
+exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
-const H2Server_1 = require("./H2Server");
+const WSServer_1 = require("./WSServer");
+let stream;
 let desc, r, x;
 let count = 0;
-function puppetTest(action) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => {
-            H2Server_1.setActionCallback(action, (res) => {
-                let n = res.indexOf(':');
-                let rcount = Number(res.substring(0, n));
-                res = res.substring(n + 1);
-                const parts = res.split('=');
-                const ract = (parts[0] || '').trim();
-                const ans = (parts[1] || '').trim();
-                if (ract === action.trim()) {
-                    resolve(ans);
-                }
-            });
-        });
-    });
-}
 /**
  * Transact a single remote test action at the connected app client
  *
- * @param t The tap instance passed into test execution function from `runRemoteTest`
+ * @param t The tap instance passed into test execution function from `runRemoteTest`, or null to skip tap
  * @param action The directive to perform
  * @param description A description of this test action
  * @param expected The expected return result of this test action
+ *
+ * @return {boolean} the result of the test result matching expected; may be ignored.
  */
 function testRemote(t, action, description, expected) {
     return __awaiter(this, void 0, void 0, function* () {
         desc = description;
         x = '' + expected;
-        r = yield puppetTest(action);
-        t.ok(r === x, desc + ` expected ${x}, got ${r}`);
+        r = yield stream.sendDirective(action);
+        const ok = r === x;
+        if (t)
+            t.ok(ok, desc + ` expected ${x}, got ${r}`);
+        return ok;
     });
 }
 exports.testRemote = testRemote;
 /**
- * Should be called at the top of a test suite
- * It really only serves to synchronize subsequent test/returns, and can theoretically be called after the start also.
- * @param t The tap instance
+ * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
+ *
+ * @param action The directive to perform
+ * @returns {string} The JSON result of the action, Stringified
  */
-function startTest(t) {
+function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
-        desc = 'first connect';
-        r = yield puppetTest('start');
-        x = '';
-        t.ok(r === x, desc + ` expected ${x}, got ${r}`);
+        console.log('callRemote', action);
+        return yield stream.sendDirective(action);
+    });
+}
+exports.callRemote = callRemote;
+/**
+ * Should be called at the top of a test suite, but it's just for symmetry with `endTest`
+ * In this version, nothing is actually sent to the server.
+ * @param t The tap instance, if using tap
+ *
+ * return {boolean} true if stream is ready.
+ */
+function startTest(t = null) {
+    return __awaiter(this, void 0, void 0, function* () {
+        desc = 'stream connect';
+        r = !!stream;
+        x = true;
+        const ok = r === x;
+        if (t)
+            t.ok(ok, desc + (ok ? ' successful' : ' FAILED'));
+        return ok;
     });
 }
 exports.startTest = startTest;
 /**
  * Call when all the tests are complete.  The client will continue with its disposition after that, either exiting, or
- * continuing to run.
- * @param t The tap instance
+ * continuing to run.  This should be the end of any remote testing, regardless.
+ * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
-function endTest(t) {
+function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
-        t.end();
-        puppetTest('end');
+        if (t)
+            t.end();
+        stream.sendDirective('end');
     });
 }
 exports.endTest = endTest;
 /**
  * Initiate the connected test.  Pass the title of the test and the async function that conducts the test suite
  *
+ * At this point the client has been launched, possibly under appium
+ *
  * @param title Title of this test that will appear on the report
- * @param testFunc The function that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
+ * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        const stream = new H2Server_1.H2Server();
-        stream.listen();
-        return tap_1.default.test('Proof of concept walk-thru', t => {
-            return H2Server_1.waitToConnect().then(() => {
-                return testFunc(t);
-            });
+        stream = new WSServer_1.WSServer();
+        yield stream.listen();
+        return tap_1.default.test(title, t => {
+            return testFunc(t);
         });
     });
 }
