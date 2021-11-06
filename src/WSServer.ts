@@ -132,7 +132,15 @@ export class WSServer {
         res = res.substring(n+1)
         const parts = res.split('=')
         const ract = (parts[0] || '').trim()
-        const ans = (parts[1] || '').trim()
+        let ans = (parts[1] || '').trim()
+        if( (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}')
+         || (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}') ) {
+            try {
+                ans = JSON.parse(ans)
+            } catch(e) {
+                console.warn(e)
+            }
+        }    
         if(ract === 'end' && ans === '1000') {
             if(this.ws) this.ws.close(1000)
             if(process && process.exit) process.exit(0)
