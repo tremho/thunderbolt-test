@@ -90,11 +90,11 @@ export class WSServer {
     // private directives:string[] = testDirectives
 
     listen(port:number = defaultPort):Promise<void> {
-        console.log('Starting server...')
+        console.log('>>>>>>>>>>>>>>   Starting server...')
         return new Promise(resolve => {
             const wss = new WebSocketServer({port})
             wss.on('connection', (ws:WebSocket)=> {
-                console.log('server connected')
+                console.log('>>>>>>>>>>>> server connected')
                 this.ws = ws
                 ws.on('message', (message:RawData) => {
                     const str = message.toString()
