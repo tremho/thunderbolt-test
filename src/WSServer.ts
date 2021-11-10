@@ -119,6 +119,7 @@ export class WSServer {
     //     return looper()
     // }
     sendDirective(action:string) {
+        console.log('server: sendDirective ', action)
         return new Promise(resolve => {
             this.responseResolver = resolve
             if(this.ws) {
