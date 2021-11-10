@@ -101,8 +101,10 @@ export class WSServer {
                     this.handleResponse(str)
                 })
                 // clear connection gate
+                console.log('resolving promise now')
                 resolve()
             })
+            console.log('promise is unresolved yet')
         })
     }
     // runDirectives():Promise<void> {

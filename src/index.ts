@@ -77,6 +77,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     console.log(`Running remote test "${title}" once client connects...`)
     console.log('----------------')
     stream = new WSServer()
+    console.log('we are indeed awaiting a listen here')
     await stream.listen()
     console.log('%%%%%%%%%%%%%%%% Executing Tap Test function %%%%%%%%%%%%')
     return Tap.test(title, t => {
