@@ -73,15 +73,16 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    let valid = false
+    let valid:boolean|void = false
     console.log('----------------')
     console.log(`Running remote test "${title}" once client connects...`)
     console.log('----------------')
-    while(!valid) {
-        stream = new WSServer()
-        console.log('we are indeed awaiting a listen here')
-        valid = await stream.listen()
-    }
+    stream = new WSServer()
+    console.log('we are indeed awaiting a listen here')
+    valid = await stream.listen().catch(e => {
+        console.error('catch on stream listen error ', e)
+    })
+    console.log('valid is', valid)
     console.log('%%%%%%%%%%%%%%%% Executing Tap Test function %%%%%%%%%%%%')
     return Tap.test(title, t => {
         return testFunc(t)
