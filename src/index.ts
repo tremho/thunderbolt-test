@@ -62,7 +62,7 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
-    stream.sendDirective('end')
+    // stream.sendDirective('end')
 }
 
 /**
