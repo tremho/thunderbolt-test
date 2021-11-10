@@ -125,7 +125,6 @@ export class WSServer {
             if(parts[0] === 'wait') {
                 // Pre-emptive intercept of wait.  no need to wait at client side. it's waiting for us already.
                 let ms = Number(parts[1])
-                console.log('wait '+ms)
                 setTimeout(resolve, ms)
             } else {
                 this.responseResolver = resolve
