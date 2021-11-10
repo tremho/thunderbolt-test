@@ -153,7 +153,7 @@ export class WSServer {
         }    
         if(ract === 'end' && ans === '1000') {
             if(this.ws) this.ws.close(1000)
-            if(process && process.exit) process.exit(0)
+            // if(process && process.exit) process.exit(0)
         }
         // console.log('response to '+ract+' = "'+ans+'"')
         this.responseResolver(ans)
