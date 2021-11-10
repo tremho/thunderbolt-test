@@ -73,6 +73,9 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
+    console.log('----------------')
+    console.log(`Running remote test "${title}" once client connects...`)
+    console.log('----------------')
     stream = new WSServer()
     await stream.listen()
     console.log('%%%%%%%%%%%%%%%% Executing Tap Test function %%%%%%%%%%%%')
