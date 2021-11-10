@@ -78,7 +78,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     console.log(`Running remote test "${title}" once client connects...`)
     console.log('----------------')
     stream = new WSServer()
-    console.log('we are indeed awaiting a listen here')
+    console.log('we are indeed awaiting a listen here at', new Date().toLocaleTimeString())
     valid = await stream.listen().catch(e => {
         console.error('catch on stream listen error ', e)
     })
