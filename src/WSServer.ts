@@ -89,7 +89,7 @@ export class WSServer {
     private responseResolver:any
     // private directives:string[] = testDirectives
 
-    listen(port:number = defaultPort):Promise<void> {
+    listen(port:number = defaultPort):Promise<boolean> {
         console.log('>>>>>>>>>>>>>>   Starting server...')
         return new Promise(resolve => {
             const wss = new WebSocketServer({port})
@@ -102,7 +102,7 @@ export class WSServer {
                 })
                 // clear connection gate
                 console.log('resolving promise now')
-                resolve()
+                resolve(true)
             })
             console.log('promise is unresolved yet')
         })
