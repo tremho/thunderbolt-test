@@ -61,8 +61,8 @@ export async function startTest(t:any = null) {
  * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
 export async function endTest(t:any = null) {
-    if(t) t.end()
-    // stream.sendDirective('end')
+    // if(t) t.end()
+    stream.sendDirective('end')
 }
 
 /**
