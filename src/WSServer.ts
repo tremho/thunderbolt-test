@@ -121,11 +121,19 @@ export class WSServer {
     sendDirective(action:string) {
         console.log('server: sendDirective ', action)
         return new Promise(resolve => {
-            this.responseResolver = resolve
-            if(this.ws) {
-                this.ws.send(action)
+            const parts = action.split(' ')
+            if(parts[0] === 'wait') {
+                // Pre-emptive intercept of wait.  no need to wait at client side. it's waiting for us already.
+                let ms = Number(parts[1])
+                console.log('wait '+ms)
+                setTimeout(resolve, ms)
             } else {
-                this.responseResolver('')
+                this.responseResolver = resolve
+                if (this.ws) {
+                    this.ws.send(action)
+                } else {
+                    this.responseResolver('')
+                }
             }
         })
     }
