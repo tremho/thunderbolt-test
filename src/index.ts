@@ -77,7 +77,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     await stream.listen()
     console.log('connected --> Starting '+title)
-    Tap.test(title, t => {
+    return Tap.test(title, t => {
         testFunc(t)
     })
 }
