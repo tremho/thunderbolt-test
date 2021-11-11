@@ -74,10 +74,14 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    stream = new WSServer()
-    await stream.listen()
+    // stream = new WSServer()
+    // await stream.listen()
+    await delay(1000)
     Tap.test(title, t => {
         testFunc(t)
     })
 }
 
+async function delay(ms:number) {
+    return new Promise((resolve) => { setTimeout(resolve, ms) })
+}
