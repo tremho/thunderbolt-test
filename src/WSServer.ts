@@ -89,9 +89,9 @@ export class WSServer {
     private responseResolver:any
     // private directives:string[] = testDirectives
 
-    listen(port:number = defaultPort):Promise<any> {
+    listen(port:number = defaultPort):Promise<boolean> {
         console.log('>>>>>>>>>>>>>>   Starting server...')
-        const p = new Promise(resolve => {
+        return new Promise(resolve => {
             const wss = new WebSocketServer({port})
             wss.on('connection', (ws:WebSocket)=> {
                 console.log('>>>>>>>>>>>> server connected')
@@ -106,14 +106,15 @@ export class WSServer {
             })
             console.log('promise is unresolved yet')
         })
-        p.then((v)=> {
-            console.log('Listen Promise resolves with', v)
-            return v
-        })
-        p.catch((e:Error)=> {
-            console.log('Listen Promise rejects with ', e)
-        })
-        return p
+        //
+        // p.then((v)=> {
+        //     console.log('Listen Promise resolves with', v)
+        //     return v
+        // })
+        // p.catch((e:Error)=> {
+        //     console.log('Listen Promise rejects with ', e)
+        // })
+        // return p
     }
     // runDirectives():Promise<void> {
     //     const looper = async ():Promise<void> => {
