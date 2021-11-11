@@ -77,7 +77,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     await stream.listen()
     return Tap.test(title, t => {
-        return testFunc(t)
+        return Promise.resolve(testFunc(t))
     })
 }
 
