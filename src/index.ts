@@ -74,11 +74,12 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    // stream = new WSServer()
-    // await stream.listen()
-    await delay(1000)
+    stream = new WSServer()
     Tap.test(title, t => {
-        testFunc(t)
+        stream.listen().then(() => {
+            console.log('connected --> Starting '+title)
+            testFunc(t)
+        })
     })
 }
 
