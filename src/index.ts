@@ -21,7 +21,7 @@ export async function testRemote(t:any, action:string, description:string, expec
     desc = description
     x = expected
     r = await stream.sendDirective(action)
-    if(typeof r === 'string' && typeof x === 'number') x = ''+x
+    if(typeof r === 'string' && typeof x !== 'string') x = ''+x
     const ok = r === x
     if(t) t.ok(ok, desc + ` expected ${x}, got ${r}`)
     return ok
@@ -77,9 +77,12 @@ export async function runRemoteTest(title:string, testFunc:any) {
     console.log('>>>>>>>>>>>>>>>>>>> INSIDE RUNREMOTETEST >>>>>>>>>>>>>>>>>>')
     stream = new WSServer()
     await stream.listen()
-    console.log('---------- Stream is listening')
+    console.log('connected --> Starting '+title)
     return Tap.test(title, t => {
-        return testFunc(t)
+        testFunc(t)
     })
 }
 
+async function delay(ms:number) {
+    return new Promise((resolve) => { setTimeout(resolve, ms) })
+}

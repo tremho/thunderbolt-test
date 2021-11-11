@@ -106,6 +106,15 @@ export class WSServer {
             })
             console.log('promise is unresolved yet')
         })
+        //
+        // p.then((v)=> {
+        //     console.log('Listen Promise resolves with', v)
+        //     return v
+        // })
+        // p.catch((e:Error)=> {
+        //     console.log('Listen Promise rejects with ', e)
+        // })
+        // return p
     }
     // runDirectives():Promise<void> {
     //     const looper = async ():Promise<void> => {
@@ -145,6 +154,7 @@ export class WSServer {
         let ans = (parts[1] || '').trim()
         if( (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}')
          || (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}') ) {
+            console.log("Converting JSON")
             try {
                 ans = JSON.parse(ans)
             } catch(e) {
@@ -153,9 +163,12 @@ export class WSServer {
         }    
         if(ract === 'end' && ans === '1000') {
             if(this.ws) this.ws.close(1000)
-            // if(process && process.exit) process.exit(0)
+            if(process && process.exit) {
+                console.log('Forcing exit on close')
+                process.exit(0)
+            }
         }
-        // console.log('response to '+ract+' = "'+ans+'"')
+        console.log('response to '+ract+' = "'+ans+'"')
         this.responseResolver(ans)
     }
 }
