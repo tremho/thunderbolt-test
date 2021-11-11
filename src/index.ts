@@ -78,8 +78,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     // await stream.listen()
     console.log('---------- Stream is listening')
-    return Tap.test(title, t => {
-        return testFunc(t)
+    Tap.test(title, t => {
+        return stream.listen().then(() => {
+            return testFunc(t)
+        })
     })
 }
 
