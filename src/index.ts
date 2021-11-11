@@ -19,8 +19,9 @@ let count = 0;
  */
 export async function testRemote(t:any, action:string, description:string, expected:any) {
     desc = description
-    x = ''+expected
+    x = expected
     r = await stream.sendDirective(action)
+    if(typeof r === 'string' && typeof x !== 'string') x = ''+x
     const ok = r === x
     if(t) t.ok(ok, desc + ` expected ${x}, got ${r}`)
     return ok
