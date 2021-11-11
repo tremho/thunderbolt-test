@@ -75,11 +75,12 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
+    await stream.listen().catch((e:Error) => {
+        console.error('Failed to connect to application for testing', e)
+    })
+    console.log('connected --> Starting '+title)
     Tap.test(title, t => {
-        stream.listen().then(() => {
-            console.log('connected --> Starting '+title)
-            testFunc(t)
-        })
+        testFunc(t)
     })
 }
 
