@@ -34,7 +34,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  * @returns {string} The JSON result of the action, Stringified
  */
 export async function callRemote(action:string) {
-    console.log('callRemote', action)
+    // console.log('callRemote', action)
     return  await stream.sendDirective(action)
 }
 /**
@@ -46,7 +46,7 @@ export async function callRemote(action:string) {
  */
 export async function startTest(t:any = null) {
 
-    console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
+    // console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
     desc = 'stream connect'
     r = !!stream
     x = true
@@ -74,10 +74,10 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    console.log('>>>>>>>>>>>>>>>>>>> INSIDE RUNREMOTETEST >>>>>>>>>>>>>>>>>>')
+
     stream = new WSServer()
     await stream.listen()
-    console.log('connected --> Starting '+title)
+    // console.log('connected --> Starting '+title)
     return Tap.test(title, t => {
         testFunc(t)
     })
