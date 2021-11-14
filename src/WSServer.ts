@@ -4,8 +4,6 @@ import {RawData, WebSocket, WebSocketServer} from 'ws'
 
 const defaultPort = 51610
 
-let isConnected = false
-
 let actionCallback:any
 let connectResolve:any
 
@@ -28,19 +26,21 @@ export class WSServer {
     // private directives:string[] = testDirectives
 
     listen(port:number = defaultPort):Promise<boolean> {
-        if(isConnected) return Promise.resolve(true)
         return new Promise(resolve => {
-            const wss = new WebSocketServer({port})
-            wss.on('connection', (ws:WebSocket)=> {
-                this.ws = ws
-                ws.on('message', (message:RawData) => {
-                    const str = message.toString()
-                    this.handleResponse(str)
+            try {
+                const wss = new WebSocketServer({port})
+                wss.on('connection', (ws:WebSocket)=> {
+                    this.ws = ws
+                    ws.on('message', (message: RawData) => {
+                        const str = message.toString()
+                        this.handleResponse(str)
+                    })
                 })
-                // clear connection gate
-                isConnected = true
-                resolve(true)
-            })
+            } catch(e:any) {
+                console.warn(e.message)
+            }
+            // clear connection gate
+            resolve(true)
         })
     }
 
@@ -74,7 +74,6 @@ export class WSServer {
         }    
         if(ract === 'end' && ans === '1000') {
             if(this.ws) this.ws.close(1000)
-            isConnected = false
             if(process && process.exit) {
                 console.log('Forcing exit on close')
                 process.exit(0)
