@@ -27,20 +27,16 @@ export class WSServer {
 
     listen(port:number = defaultPort):Promise<boolean> {
         return new Promise(resolve => {
-            try {
-                const wss = new WebSocketServer({port})
-                wss.on('connection', (ws:WebSocket)=> {
-                    this.ws = ws
-                    ws.on('message', (message: RawData) => {
-                        const str = message.toString()
-                        this.handleResponse(str)
-                    })
+            const wss = new WebSocketServer({port})
+            wss.on('connection', (ws:WebSocket)=> {
+                this.ws = ws
+                ws.on('message', (message: RawData) => {
+                    const str = message.toString()
+                    this.handleResponse(str)
                 })
-            } catch(e:any) {
-                console.warn(e.message)
-            }
-            // clear connection gate
-            resolve(true)
+                // clear connection gate
+                resolve(true)
+            })
         })
     }
 
