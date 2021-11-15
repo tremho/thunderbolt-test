@@ -88,5 +88,9 @@ async function delay(ms:number) {
 }
 
 export async function appiumDirective(directive:string) {
+    return callRemote('appium:'+directive)
+}
 
+export async function takeScreenshot(t:any, desc:string) {
+    return testRemote(t, 'appium:screenshot', desc, undefined)
 }
