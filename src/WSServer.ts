@@ -36,6 +36,7 @@ export class WSServer {
                 })
                 ws.on('close', (code:number ) => {
                     console.log('Server sees a close event ', code)
+                    this.responseResolver && this.responseResolver('')
                 })
                 // clear connection gate
                 resolve(true)
