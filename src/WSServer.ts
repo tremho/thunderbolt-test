@@ -23,12 +23,12 @@ export function setActionCallback(action:string, cbResults:any) {
 export class WSServer {
     private ws?:WebSocket
     private responseResolver:any
-    // private directives:string[] = testDirectives
 
     listen(port:number = defaultPort):Promise<boolean> {
         return new Promise(resolve => {
             const wss = new WebSocketServer({port})
             wss.on('connection', (ws:WebSocket)=> {
+                console.log('server see connection message')
                 this.ws = ws
                 ws.on('message', (message: RawData) => {
                     const str = message.toString()
