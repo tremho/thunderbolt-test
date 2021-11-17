@@ -34,8 +34,12 @@ export class WSServer {
                     const str = message.toString()
                     this.handleResponse(str)
                 })
+                ws.on('close', (code:number ) => {
+                    console.log('Server sees a close event ', code)
+                })
                 // clear connection gate
                 resolve(true)
+
             })
         })
     }
@@ -69,6 +73,7 @@ export class WSServer {
             }
         }    
         if(ract === 'end' && ans === '1000') {
+            console.log('Server gets an end response', ans, !!this.ws, !!process)
             if(this.ws) this.ws.close(1000)
             if(process && process.exit) {
                 console.log('Forcing exit on close')
