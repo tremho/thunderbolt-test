@@ -75,10 +75,13 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
+    console.log("Starting WTF Tracing")
     stream = new WSServer()
+    console.log("WTF 1")
     await stream.listen()
-    console.log('connected --> Starting '+title)
+    console.log('WTF2 : connected --> Starting '+title)
     return Tap.test(title, t => {
+        console.log("WTF 3")
         testFunc(t)
     })
 }
