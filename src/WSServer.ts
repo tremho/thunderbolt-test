@@ -73,9 +73,9 @@ export class WSServer {
                 console.warn(e)
             }
         }    
-        if(ract === 'end' && ans === '1000') {
+        if(ract === 'end') {
             console.log('Server gets an end response', ans, !!this.ws, !!process)
-            if(this.ws) this.ws.close(1000)
+            if(this.ws) this.ws.close(Number(ans))
             if(process && process.exit) {
                 console.log('Forcing exit on close')
                 process.exit(0)
