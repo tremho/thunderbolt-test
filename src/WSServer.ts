@@ -33,20 +33,19 @@ export class WSServer {
             } catch(e) {
                 console.error("CAUGHT SERVER LISTEN: ", e)
             }
-            wss.on('connection', (ws:WebSocket)=> {
+            if(wss) wss.on('connection', (ws:WebSocket)=> {
                 console.log('server see connection event')
                 this.ws = ws
                 ws.on('message', (message: RawData) => {
                     const str = message.toString()
                     this.handleResponse(str)
                 })
-                ws.on('close', (code:number ) => {
+                ws.on('close', (code: number) => {
                     console.log('Server sees a close event ', code)
                     this.responseResolver && this.responseResolver('')
                 })
                 // clear connection gate
                 resolve(true)
-
             })
         })
     }
