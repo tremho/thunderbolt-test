@@ -76,6 +76,7 @@ export async function endTest(t:any = null) {
 export async function runRemoteTest(title:string, testFunc:any) {
 
     console.log("Starting WTF Tracing")
+    return
     stream = new WSServer()
     console.log("WTF 1")
     await stream.listen()
