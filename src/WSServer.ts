@@ -25,10 +25,16 @@ export class WSServer {
     private responseResolver:any
 
     listen(port:number = defaultPort):Promise<boolean> {
+        console.log('Test server listening...')
         return new Promise(resolve => {
-            const wss = new WebSocketServer({port})
+            let wss
+            try {
+                wss = new WebSocketServer({port})
+            } catch(e) {
+                console.error("CAUGHT SERVER LISTEN: ", e)
+            }
             wss.on('connection', (ws:WebSocket)=> {
-                console.log('server see connection message')
+                console.log('server see connection event')
                 this.ws = ws
                 ws.on('message', (message: RawData) => {
                     const str = message.toString()
