@@ -34,7 +34,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  * @returns {string} The JSON result of the action, Stringified
  */
 export async function callRemote(action:string) {
-    console.log('callRemote', action)
+    // console.log('callRemote', action)
     return  await stream.sendDirective(action)
 }
 /**
@@ -46,7 +46,7 @@ export async function callRemote(action:string) {
  */
 export async function startTest(t:any = null) {
 
-    console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
+    // console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
     desc = 'stream connect'
     r = !!stream
     x = true
@@ -74,11 +74,14 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    console.log('>>>>>>>>>>>>>>>>>>> INSIDE RUNREMOTETEST >>>>>>>>>>>>>>>>>>')
+
+    console.log("Starting WTF Tracing")
     stream = new WSServer()
+    console.log("WTF 1")
     await stream.listen()
-    console.log('connected --> Starting '+title)
+    console.log('WTF2 : connected --> Starting '+title)
     return Tap.test(title, t => {
+        console.log("WTF 3")
         testFunc(t)
     })
 }
@@ -86,3 +89,11 @@ export async function runRemoteTest(title:string, testFunc:any) {
 async function delay(ms:number) {
     return new Promise((resolve) => { setTimeout(resolve, ms) })
 }
+
+// export async function appiumDirective(directive:string) {
+//     return callRemote('appium:'+directive)
+// }
+//
+// export async function takeScreenshot(t:any, desc:string) {
+//     return testRemote(t, 'appium:screenshot', desc, undefined)
+// }
