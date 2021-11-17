@@ -58,6 +58,7 @@ export class WSServer {
         })
     }
     handleResponse(res:string) {
+        console.log('received response ', res)
         let n = res.indexOf(':')
         let rcount = Number(res.substring(0, n))
         res = res.substring(n+1)
