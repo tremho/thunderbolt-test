@@ -88,14 +88,16 @@ export async function runRemoteTest(title:string, testFunc:any) {
 
 function saveReport(report:string) {
     const rootPath = path.resolve('..')
+    console.log("TEST REPORT ROOT PATH", rootPath)
     if(fs.existsSync(path.join(rootPath, 'package.json'))) {
         const dtf = "current"
         const folderPath = path.join(rootPath, 'report', 'electron', dtf)
         fs.mkdirSync(folderPath, {recursive:true})
         const rptPath = path.join(folderPath, 'report.html')
+        console.log("TEST REPORT PATH", rptPath)
         fs.writeFileSync(rptPath, report)
     } else {
-        console.error('Root path not detected at ', rootPath)
+        console.error('TEST REPORT: Root path not detected at ', rootPath)
     }
 
 }
