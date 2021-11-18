@@ -1,6 +1,8 @@
 import Tap from 'tap'
 
 import {WSServer} from "./WSServer"
+import path from "path";
+import fs from "fs";
 
 
 let stream:WSServer
@@ -62,8 +64,8 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
-    const report = await stream.sendDirective('getReport')
-    console.log('TEST REPORT', report)
+    const report:any = await stream.sendDirective('getReport')
+    saveReport(report)
     return stream.sendDirective('end')
 }
 
@@ -77,14 +79,23 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
-    console.log("Starting WTF Tracing")
     stream = new WSServer()
-    console.log("WTF 1")
     await stream.listen()
-    console.log('WTF2 : connected --> Starting '+title)
     return Tap.test(title, t => {
-        console.log("WTF 3")
         testFunc(t)
-        console.log("WTF 4")
     })
+}
+
+function saveReport(report:string) {
+    const rootPath = path.resolve('..')
+    if(fs.existsSync(path.join(rootPath, 'package.json'))) {
+        const dtf = "current"
+        const folderPath = path.join(rootPath, 'report', 'electron', dtf)
+        fs.mkdirSync(folderPath, {recursive:true})
+        const rptPath = path.join(folderPath, 'report.html')
+        fs.writeFileSync(rptPath, report)
+    } else {
+        console.error('Root path not detected at ', rootPath)
+    }
+
 }
