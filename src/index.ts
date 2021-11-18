@@ -87,7 +87,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
 }
 
 function saveReport(report:string) {
-    const rootPath = path.resolve('..')
+    const rootPath = path.resolve('.')
     console.log("TEST REPORT ROOT PATH", rootPath)
     if(fs.existsSync(path.join(rootPath, 'package.json'))) {
         const dtf = "current"
