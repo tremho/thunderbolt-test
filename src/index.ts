@@ -83,17 +83,6 @@ export async function runRemoteTest(title:string, testFunc:any) {
     return Tap.test(title, t => {
         console.log("WTF 3")
         testFunc(t)
+        console.log("WTF 4")
     })
 }
-
-async function delay(ms:number) {
-    return new Promise((resolve) => { setTimeout(resolve, ms) })
-}
-
-// export async function appiumDirective(directive:string) {
-//     return callRemote('appium:'+directive)
-// }
-//
-// export async function takeScreenshot(t:any, desc:string) {
-//     return testRemote(t, 'appium:screenshot', desc, undefined)
-// }
