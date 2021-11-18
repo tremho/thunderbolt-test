@@ -62,7 +62,9 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
-    stream.sendDirective('end')
+    const report = await stream.sendDirective('getReport')
+    console.log('TEST REPORT', report)
+    return stream.sendDirective('end')
 }
 
 /**

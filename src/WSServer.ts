@@ -83,7 +83,7 @@ export class WSServer {
             console.log('Server gets an end response', ans, !!this.ws, !!process)
             if(this.ws) this.ws.close(Number(ans))
             if(process && process.exit) {
-                console.log('Forcing exit on close')
+                console.log('Forcing cli to exit')
                 process.exit(0)
             }
         }
