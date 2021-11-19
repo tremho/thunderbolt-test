@@ -7,7 +7,8 @@ import fs from "fs";
 
 let stream:WSServer
 let desc: string, r:any, x: any
-let count = 0;
+
+let runcount = 0
 
 /**
  * Transact a single remote test action at the connected app client
@@ -64,10 +65,13 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
-    const report:any = await stream.sendDirective('getReport')
-    saveReport(report)
+    if(!--runcount) {
+        const report:any = await stream.sendDirective('getReport')
+        saveReport(report)
+    }
     return stream.sendDirective('end')
 }
+
 
 /**
  * Initiate the connected test.  Pass the title of the test and the async function that conducts the test suite
@@ -80,7 +84,11 @@ export async function endTest(t:any = null) {
 export async function runRemoteTest(title:string, testFunc:any) {
 
     stream = new WSServer()
-    await stream.listen()
+    if(!runcount) {
+        await stream.listen()
+    }
+    await stream.sendDirective('startReport "'+title+'" '+runcount)
+    runcount++
     return Tap.test(title, t => {
         testFunc(t)
     })
