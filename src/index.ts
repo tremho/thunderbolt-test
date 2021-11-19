@@ -87,7 +87,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     if(!runcount) {
         await stream.listen()
     }
-    await stream.sendDirective('startReport "'+title+'" '+runcount)
+    await stream.sendDirective('startReport '+runcount+' "'+title+'"')
     runcount++
     return Tap.test(title, t => {
         testFunc(t)
