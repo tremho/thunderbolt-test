@@ -97,6 +97,11 @@ export async function runRemoteTest(title:string, testFunc:any) {
     })
 }
 
+export async function screenshot(name:string) {
+    const pth = await callRemote('screenshot '+name)
+    return (pth.substring(pth.lastIndexOf('/')+1, pth.lastIndexOf('.')) === name)
+}
+
 function saveReport(report:string) {
     const rootPath = path.resolve('.')
     console.log("TEST REPORT ROOT PATH", rootPath)
@@ -110,5 +115,4 @@ function saveReport(report:string) {
     } else {
         console.error('TEST REPORT: Root path not detected at ', rootPath)
     }
-
 }
