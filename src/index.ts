@@ -67,7 +67,7 @@ export async function endTest(t:any = null) {
     if(t) t.end()
     if(!--runcount) {
         let report:any = await stream.sendDirective('getReport')
-        report = report.replace(/classeq/g, 'class=')
+        report = report.replace(/--/g, '=')
         saveReport(report)
     }
     return stream.sendDirective('end')
