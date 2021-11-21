@@ -87,6 +87,7 @@ function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
         if (t)
             t.end();
+        console.log("ending test, previous is", previous);
         if (!--runcount) {
             let report = yield stream.sendDirective('getReport');
             report = report.replace(/--/g, '=');

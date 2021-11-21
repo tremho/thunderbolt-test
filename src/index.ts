@@ -66,6 +66,7 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
+    console.log("ending test, previous is",previous)
     if(!--runcount) {
         let report:any = await stream.sendDirective('getReport')
         report = report.replace(/--/g, '=')
