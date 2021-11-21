@@ -100,6 +100,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     previous = Tap.test(title, t => {
         testFunc(t)
     })
+    console.log('previous=',previous)
     return previous
 }
 

@@ -119,6 +119,7 @@ function runRemoteTest(title, testFunc) {
         previous = tap_1.default.test(title, t => {
             testFunc(t);
         });
+        console.log('previous=', previous);
         return previous;
     });
 }

@@ -35,6 +35,9 @@ export class WSServer {
             }
             if(wss) {
                 wss.on('error', (e:Error) => {
+                    if((e as any).code === 'EADDRINUSE') {
+                        console.warn('Server is busy, please wait...')
+                    }
                     console.error("WS SERVER ERROR", e)
                     resolve(false)
                 })
