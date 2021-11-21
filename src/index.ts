@@ -9,6 +9,7 @@ let stream:WSServer
 let desc: string, r:any, x: any
 
 let runcount = 0
+let previous:Promise<unknown> = Promise.resolve()
 
 /**
  * Transact a single remote test action at the connected app client
@@ -20,7 +21,7 @@ let runcount = 0
  *
  * @return {boolean} the result of the test result matching expected; may be ignored.
  */
-export async function testRemote(t:any, action:string, description:string, expected:any) {
+export async function testRemote(t:any, action:string, description:string, expected?:any) {
     desc = description
     x = expected
     r = await stream.sendDirective(action)
@@ -84,6 +85,9 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
+    console.log('awaiting previous...')
+    await previous
+
     console.log('Run Remote Test, runcount=', runcount)
 
     stream = new WSServer()
@@ -97,6 +101,13 @@ export async function runRemoteTest(title:string, testFunc:any) {
     })
 }
 
+/**
+ * Takes a screenshot of the current page
+ *
+ * Image will be saved as a PNG in the appropriate report directory
+ *
+ * @param name Name to give this image
+ */
 export async function screenshot(name:string) {
     return await callRemote('screenshot '+name)
 }

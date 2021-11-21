@@ -12,12 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
+exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const WSServer_1 = require("./WSServer");
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 let stream;
 let desc, r, x;
-let count = 0;
+let runcount = 0;
+let previous = Promise.resolve();
 /**
  * Transact a single remote test action at the connected app client
  *
@@ -31,8 +34,10 @@ let count = 0;
 function testRemote(t, action, description, expected) {
     return __awaiter(this, void 0, void 0, function* () {
         desc = description;
-        x = '' + expected;
+        x = expected;
         r = yield stream.sendDirective(action);
+        if (typeof r === 'string' && typeof x !== 'string')
+            x = '' + x;
         const ok = r === x;
         if (t)
             t.ok(ok, desc + ` expected ${x}, got ${r}`);
@@ -48,7 +53,7 @@ exports.testRemote = testRemote;
  */
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('callRemote', action);
+        // console.log('callRemote', action)
         return yield stream.sendDirective(action);
     });
 }
@@ -62,6 +67,7 @@ exports.callRemote = callRemote;
  */
 function startTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
         desc = 'stream connect';
         r = !!stream;
         x = true;
@@ -81,7 +87,12 @@ function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
         if (t)
             t.end();
-        stream.sendDirective('end');
+        if (!--runcount) {
+            let report = yield stream.sendDirective('getReport');
+            report = report.replace(/--/g, '=');
+            saveReport(report);
+        }
+        return stream.sendDirective('end');
     });
 }
 exports.endTest = endTest;
@@ -95,11 +106,46 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('awaiting previous...');
+        yield previous;
+        console.log('Run Remote Test, runcount=', runcount);
         stream = new WSServer_1.WSServer();
-        yield stream.listen();
+        if (!runcount) {
+            yield stream.listen();
+        }
+        yield stream.sendDirective('startReport ' + runcount + ' "' + title + '"');
+        runcount++;
         return tap_1.default.test(title, t => {
-            return testFunc(t);
+            testFunc(t);
         });
     });
 }
 exports.runRemoteTest = runRemoteTest;
+/**
+ * Takes a screenshot of the current page
+ *
+ * Image will be saved as a PNG in the appropriate report directory
+ *
+ * @param name Name to give this image
+ */
+function screenshot(name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callRemote('screenshot ' + name);
+    });
+}
+exports.screenshot = screenshot;
+function saveReport(report) {
+    const rootPath = path_1.default.resolve('.');
+    console.log("TEST REPORT ROOT PATH", rootPath);
+    if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
+        const dtf = "current";
+        const folderPath = path_1.default.join(rootPath, 'report', 'electron', dtf);
+        fs_1.default.mkdirSync(folderPath, { recursive: true });
+        const rptPath = path_1.default.join(folderPath, 'report.html');
+        console.log("TEST REPORT PATH", rptPath);
+        fs_1.default.writeFileSync(rptPath, report);
+    }
+    else {
+        console.error('TEST REPORT: Root path not detected at ', rootPath);
+    }
+}

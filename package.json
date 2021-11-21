@@ -1,14 +1,14 @@
 {
   "name": "@tremho/jove-test",
-  "version": "0.6.9-pre-release.115",
+  "version": "0.6.9-pre-release.116",
   "description": "Test API Module for Jove Framework",
   "main": "build/index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublish": "npm run build && npm run typings",
     "clean": "rm -fr build node_modules && npm install",
     "build": "tsc",
-    "typings": "tsc -d src/index.ts --declarationDir dtypes --target ES2015 --esModuleInterop true --module commonjs",
+    "typings": "tsc -d src/index.ts --declarationDir dtypes --target ES2015 --esModuleInterop true --module commonjs && rm -f index.d.ts && mv dtypes/index.d.ts index.d.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tbx run tbTest": "cd ~/tbd/tbTest && tbx run"
   },
