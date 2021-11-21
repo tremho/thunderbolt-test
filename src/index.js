@@ -117,11 +117,9 @@ function runRemoteTest(title, testFunc) {
         }
         yield stream.sendDirective('startReport ' + runcount + ' "' + title + '"');
         runcount++;
-        previous = tap_1.default.test(title, t => {
-            testFunc(t);
+        return tap_1.default.test(title, t => {
+            previous = testFunc(t);
         });
-        console.log('previous=', previous);
-        return previous;
     });
 }
 exports.runRemoteTest = runRemoteTest;
@@ -140,13 +138,13 @@ function screenshot(name) {
 exports.screenshot = screenshot;
 function saveReport(report) {
     const rootPath = path_1.default.resolve('.');
-    console.log("TEST REPORT ROOT PATH", rootPath);
+    // console.log("TEST REPORT ROOT PATH", rootPath)
     if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
         const dtf = "current";
         const folderPath = path_1.default.join(rootPath, 'report', 'electron', dtf);
         fs_1.default.mkdirSync(folderPath, { recursive: true });
         const rptPath = path_1.default.join(folderPath, 'report.html');
-        console.log("TEST REPORT PATH", rptPath);
+        // console.log("TEST REPORT PATH", rptPath)
         fs_1.default.writeFileSync(rptPath, report);
     }
     else {

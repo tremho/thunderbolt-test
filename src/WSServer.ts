@@ -73,7 +73,7 @@ export class WSServer {
         })
     }
     handleResponse(res:string) {
-        console.log('received response ', res)
+        // console.log('received response ', res)
         let n = res.indexOf(':')
         let rcount = Number(res.substring(0, n))
         res = res.substring(n+1)
@@ -82,7 +82,7 @@ export class WSServer {
         let ans = (parts[1] || '').trim()
         if( (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}')
          || (ans.charAt(0) === '{' && ans.charAt(ans.length-1) === '}') ) {
-            console.log("Converting JSON")
+            // console.log("Converting JSON")
             try {
                 ans = JSON.parse(ans)
             } catch(e) {
@@ -97,7 +97,7 @@ export class WSServer {
                 process.exit(0)
             }
         }
-        console.log('response to '+ract+' = "'+ans+'"')
+        // console.log('response to '+ract+' = "'+ans+'"')
         this.responseResolver(ans)
     }
 }
