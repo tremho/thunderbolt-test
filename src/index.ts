@@ -10,6 +10,7 @@ let desc: string, r:any, x: any
 
 let runcount = 0
 let previous:Promise<unknown> = Promise.resolve()
+let prevResolve:any
 
 /**
  * Transact a single remote test action at the connected app client
@@ -66,7 +67,10 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     if(t) t.end()
-    console.log("ending test, previous is",previous)
+    if(prevResolve) {
+        console.log('ending previous flow gate')
+        prevResolve()
+    }
     if(!--runcount) {
         let report:any = await stream.sendDirective('getReport')
         report = report.replace(/--/g, '=')
@@ -90,6 +94,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     await previous
     console.log('<<<<<<<<<<< past previous')
 
+    previous = new Promise(resolve => {
+        prevResolve = resolve
+    })
+
     console.log('Run Remote Test, runcount=', runcount)
 
     stream = new WSServer()
@@ -99,7 +107,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     await stream.sendDirective('startReport '+runcount+' "'+title+'"')
     runcount++
     return Tap.test(title, t => {
-        previous = testFunc(t)
+        testFunc(t)
     })
 }
 

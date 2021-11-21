@@ -21,6 +21,7 @@ let stream;
 let desc, r, x;
 let runcount = 0;
 let previous = Promise.resolve();
+let prevResolve;
 /**
  * Transact a single remote test action at the connected app client
  *
@@ -87,7 +88,10 @@ function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
         if (t)
             t.end();
-        console.log("ending test, previous is", previous);
+        if (prevResolve) {
+            console.log('ending previous flow gate');
+            prevResolve();
+        }
         if (!--runcount) {
             let report = yield stream.sendDirective('getReport');
             report = report.replace(/--/g, '=');
@@ -110,6 +114,9 @@ function runRemoteTest(title, testFunc) {
         console.log('>>>>>>>>>>>> awaiting previous...');
         yield previous;
         console.log('<<<<<<<<<<< past previous');
+        previous = new Promise(resolve => {
+            prevResolve = resolve;
+        });
         console.log('Run Remote Test, runcount=', runcount);
         stream = new WSServer_1.WSServer();
         if (!runcount) {
@@ -118,7 +125,7 @@ function runRemoteTest(title, testFunc) {
         yield stream.sendDirective('startReport ' + runcount + ' "' + title + '"');
         runcount++;
         return tap_1.default.test(title, t => {
-            previous = testFunc(t);
+            testFunc(t);
         });
     });
 }
