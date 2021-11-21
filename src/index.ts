@@ -97,9 +97,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     }
     await stream.sendDirective('startReport '+runcount+' "'+title+'"')
     runcount++
-    return Tap.test(title, t => {
+    previous = Tap.test(title, t => {
         testFunc(t)
     })
+    return previous
 }
 
 /**

@@ -38,7 +38,7 @@ export declare function endTest(t?: any): Promise<unknown>;
  * @param title Title of this test that will appear on the report
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
-export declare function runRemoteTest(title: string, testFunc: any): Promise<void>;
+export declare function runRemoteTest(title: string, testFunc: any): Promise<unknown>;
 /**
  * Takes a screenshot of the current page
  *

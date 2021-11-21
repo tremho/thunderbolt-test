@@ -116,9 +116,10 @@ function runRemoteTest(title, testFunc) {
         }
         yield stream.sendDirective('startReport ' + runcount + ' "' + title + '"');
         runcount++;
-        return tap_1.default.test(title, t => {
+        previous = tap_1.default.test(title, t => {
             testFunc(t);
         });
+        return previous;
     });
 }
 exports.runRemoteTest = runRemoteTest;
