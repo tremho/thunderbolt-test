@@ -33,20 +33,26 @@ export class WSServer {
             } catch(e) {
                 console.error("CAUGHT SERVER LISTEN: ", e)
             }
-            if(wss) wss.on('connection', (ws:WebSocket)=> {
-                console.log('server see connection event')
-                this.ws = ws
-                ws.on('message', (message: RawData) => {
-                    const str = message.toString()
-                    this.handleResponse(str)
+            if(wss) {
+                wss.on('error', (e:Error) => {
+                    console.error("WS SERVER ERROR", e)
+                    resolve(false)
                 })
-                ws.on('close', (code: number) => {
-                    console.log('Server sees a close event ', code)
-                    this.responseResolver && this.responseResolver('')
+                wss.on('connection', (ws:WebSocket)=> {
+                    console.log('server see connection event')
+                    this.ws = ws
+                    ws.on('message', (message: RawData) => {
+                        const str = message.toString()
+                        this.handleResponse(str)
+                    })
+                    ws.on('close', (code: number) => {
+                        console.log('Server sees a close event ', code)
+                        this.responseResolver && this.responseResolver('')
+                    })
+                    // clear connection gate
+                    resolve(true)
                 })
-                // clear connection gate
-                resolve(true)
-            })
+            }
         })
     }
 
@@ -81,7 +87,7 @@ export class WSServer {
         }    
         if(ract === 'end') {
             console.log('Server gets an end response', ans, !!this.ws, !!process)
-            if(this.ws) this.ws.close(Number(ans))
+            if(this.ws) this.ws.close(Number(ans))z``
             if(process && process.exit) {
                 console.log('Forcing cli to exit')
                 process.exit(0)

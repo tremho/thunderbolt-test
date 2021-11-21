@@ -85,8 +85,9 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
-    console.log('awaiting previous...')
+    console.log('>>>>>>>>>>>> awaiting previous...')
     await previous
+    console.log('<<<<<<<<<<< past previous')
 
     console.log('Run Remote Test, runcount=', runcount)
 
