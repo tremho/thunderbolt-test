@@ -106,8 +106,9 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('awaiting previous...');
+        console.log('>>>>>>>>>>>> awaiting previous...');
         yield previous;
+        console.log('<<<<<<<<<<< past previous');
         console.log('Run Remote Test, runcount=', runcount);
         stream = new WSServer_1.WSServer();
         if (!runcount) {
