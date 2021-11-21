@@ -92,10 +92,10 @@ export class WSServer {
         if(ract === 'end') {
             console.log('Server gets an end response', ans, !!this.ws, !!process)
             if(this.ws) this.ws.close(Number(ans))
-            if(process && process.exit) {
-                console.log('Forcing cli to exit')
-                process.exit(0)
-            }
+            // if(process && process.exit) {
+            //     console.log('Forcing cli to exit')
+            //     process.exit(0)
+            // }
         }
         // console.log('response to '+ract+' = "'+ans+'"')
         this.responseResolver(ans)
