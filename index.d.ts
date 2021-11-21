@@ -1,4 +1,4 @@
-declare module "@tremho/jove-common" {
+declare module "@tremho/jove-test" {
     /**
      * Transact a single remote test action at the connected app client
      *
