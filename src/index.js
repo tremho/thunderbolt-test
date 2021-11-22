@@ -140,7 +140,7 @@ function saveReport(report) {
     // console.log("TEST REPORT ROOT PATH", rootPath)
     if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
         const dtf = "current";
-        const folderPath = path_1.default.join(getCurrentReportFolder(rootPath), 'electron');
+        const folderPath = getCurrentReportFolder(rootPath);
         fs_1.default.mkdirSync(folderPath, { recursive: true });
         const rptPath = path_1.default.join(folderPath, 'report.html');
         // console.log("TEST REPORT PATH", rptPath)
