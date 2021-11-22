@@ -112,21 +112,14 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        let p = new Promise(resolve => {
-            if (!queueTimer) {
-                queueTimer = setTimeout(() => {
-                    executeQueue;
-                    resolve(true);
-                }, 3000);
-            }
-            queueTheTest(title, testFunc);
-        });
-        return p.then(() => {
-            return Promise.all(pushers);
+        count++;
+        return tap_1.default.test(title + ' ' + count, (t) => {
+            testFunc(t);
         });
     });
 }
 exports.runRemoteTest = runRemoteTest;
+let count = 0;
 let pushers = [];
 let queueTimer;
 const testQueue = [];

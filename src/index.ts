@@ -90,21 +90,12 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-
-    let p: any = new Promise(resolve => {
-        if (!queueTimer) {
-            queueTimer = setTimeout(() => {
-                executeQueue
-                resolve(true)
-            }, 3000)
-        }
-        queueTheTest(title, testFunc)
-    })
-    return p.then(() => {
-        return Promise.all(pushers)
+    count++
+    return Tap.test(title+ ' '+count, (t:any) => {
+        testFunc(t)
     })
 }
-
+let count = 0;
 let pushers:any[] = []
 let queueTimer:any;
 const testQueue:any[] = []
