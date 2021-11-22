@@ -91,21 +91,13 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
-    // pushers.push(new Promise(resolve => {
-    //
-    // if(!queueTimer) {
-    //     queueTimer = setTimeout(()=>{
-    //         executeQueue
-    //         resolve('')
-    //     }, 3000)
-    // }
-    // queueTheTest(title, testFunc)
-    // }))
-    //
-    pushers.push(Tap.test(title, (t:any) => {
-        testFunc(t)
-    }))
-    return Promise.all(pushers)
+    if(!queueTimer) {
+        queueTimer = setTimeout(()=>{
+            executeQueue
+            return Promise.all(pushers)
+        }, 3000)
+    }
+    queueTheTest(title, testFunc)
 }
 
 let pushers:any[] = []

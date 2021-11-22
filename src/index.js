@@ -112,21 +112,13 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        // pushers.push(new Promise(resolve => {
-        //
-        // if(!queueTimer) {
-        //     queueTimer = setTimeout(()=>{
-        //         executeQueue
-        //         resolve('')
-        //     }, 3000)
-        // }
-        // queueTheTest(title, testFunc)
-        // }))
-        //
-        pushers.push(tap_1.default.test(title, (t) => {
-            testFunc(t);
-        }));
-        return Promise.all(pushers);
+        if (!queueTimer) {
+            queueTimer = setTimeout(() => {
+                executeQueue;
+                return Promise.all(pushers);
+            }, 3000);
+        }
+        queueTheTest(title, testFunc);
     });
 }
 exports.runRemoteTest = runRemoteTest;
