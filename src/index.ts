@@ -1,6 +1,6 @@
 import Tap from 'tap'
 
-import {WSServer} from "./WSServer"
+import {WSServer,setEndResolver} from "./WSServer"
 import path from "path";
 import fs from "fs";
 
@@ -94,9 +94,13 @@ export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     await stream.listen()
 
-    return Tap.test(title+ ' '+count, (t:any) => {
-        testFunc(t)
+    return new Promise(resolve => {
+        setEndResolver(resolve)
+        Tap.test(title+ ' '+count, (t:any) => {
+            testFunc(t)
+        })
     })
+
 }
 let count = 0;
 let pushers:any[] = []

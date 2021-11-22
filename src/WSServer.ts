@@ -4,20 +4,9 @@ import {RawData, WebSocket, WebSocketServer} from 'ws'
 
 const defaultPort = 51610
 
-let actionCallback:any
-let connectResolve:any
-
-export function waitToConnect():Promise<void> {
-    return new Promise(resolve => {
-        connectResolve = resolve
-    })
-}
-
-export function setActionCallback(action:string, cbResults:any) {
-    actionCallback = {
-        action:action,
-        resolver:cbResults
-    }
+let endResolver:any;
+export function setEndResolver(resolver:any) {
+    endResolver = resolver;
 }
 
 export class WSServer {
@@ -92,10 +81,7 @@ export class WSServer {
         if(ract === 'end') {
             console.log('Server gets an end response', ans, !!this.ws, !!process)
             if(this.ws) this.ws.close(Number(ans))
-            // if(process && process.exit) {
-            //     console.log('Forcing cli to exit')
-            //     process.exit(0)
-            // }
+            if(endResolver) endResolver(Number(ans))
         }
         // console.log('response to '+ract+' = "'+ans+'"')
         this.responseResolver(ans)

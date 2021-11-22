@@ -115,8 +115,11 @@ function runRemoteTest(title, testFunc) {
         count++;
         stream = new WSServer_1.WSServer();
         yield stream.listen();
-        return tap_1.default.test(title + ' ' + count, (t) => {
-            testFunc(t);
+        return new Promise(resolve => {
+            (0, WSServer_1.setEndResolver)(resolve);
+            tap_1.default.test(title + ' ' + count, (t) => {
+                testFunc(t);
+            });
         });
     });
 }
