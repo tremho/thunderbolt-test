@@ -20,7 +20,7 @@ const fs_1 = __importDefault(require("fs"));
 let stream;
 let desc, r, x;
 let runcount = 0;
-let previous = Promise.resolve();
+let previous;
 let prevResolve;
 /**
  * Transact a single remote test action at the connected app client
@@ -115,6 +115,10 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!previous) {
+            console.log('first Previous wait');
+            previous = new Promise(resolve => { setTimeout(resolve, 5000); });
+        }
         console.log('>>>>>>>>>>>> awaiting previous...');
         yield previous;
         console.log('<<<<<<<<<<< past previous');

@@ -9,7 +9,7 @@ let stream:WSServer
 let desc: string, r:any, x: any
 
 let runcount = 0
-let previous:Promise<unknown> = Promise.resolve()
+let previous:Promise<unknown>
 let prevResolve:any
 
 /**
@@ -94,13 +94,17 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
+    if(!previous) {
+        console.log('first Previous wait')
+        previous = new Promise(resolve => { setTimeout(resolve, 5000)})
+    }
     console.log('>>>>>>>>>>>> awaiting previous...')
     await previous
     console.log('<<<<<<<<<<< past previous')
 
     previous = new Promise(resolve => {
         prevResolve = resolve
-    })
+    })z`x`
 
     console.log('Run Remote Test, runcount=', runcount)
 
