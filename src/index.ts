@@ -98,13 +98,13 @@ export async function runRemoteTest(title:string, testFunc:any) {
         console.log('first Previous wait')
         previous = new Promise(resolve => { setTimeout(resolve, 5000)})
     }
-    console.log('>>>>>>>>>>>> awaiting previous...')
+    console.log('>>>>>>>>>>>> awaiting previous...', Date.now())
     await previous
-    console.log('<<<<<<<<<<< past previous')
+    console.log('<<<<<<<<<<< past previous', Date.now())
 
     previous = new Promise(resolve => {
         prevResolve = resolve
-    })z`x`
+    })
 
     console.log('Run Remote Test, runcount=', runcount)
 
