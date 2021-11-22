@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.screenshot = exports.executeQueue = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
+exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
@@ -112,7 +112,9 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        queueTheTest(title, testFunc);
+        return tap_1.default.test(title, (t) => {
+            testFunc(t);
+        });
     });
 }
 exports.runRemoteTest = runRemoteTest;
@@ -140,7 +142,6 @@ function executeQueue() {
         }
     });
 }
-exports.executeQueue = executeQueue;
 /**
  * Takes a screenshot of the current page
  *

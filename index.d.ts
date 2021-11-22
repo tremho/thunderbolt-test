@@ -39,7 +39,6 @@ export declare function endTest(t?: any): Promise<unknown>;
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export declare function runRemoteTest(title: string, testFunc: any): Promise<void>;
-export declare function executeQueue(): Promise<void>;
 /**
  * Takes a screenshot of the current page
  *
