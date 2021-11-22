@@ -91,12 +91,22 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
+    pushers.push(new Promise(resolve => {
+
     if(!queueTimer) {
-        queueTimer = setTimeout(executeQueue, 3000)
+        queueTimer = setTimeout(()=>{
+            executeQueue
+            resolve('')
+        }, 3000)
     }
     queueTheTest(title, testFunc)
+    }))
+
+    return Promise.all(pushers)
+
 }
 
+let pushers:any[] = []
 let queueTimer:any;
 const testQueue:any[] = []
 
@@ -111,12 +121,11 @@ async function executeQueue() {
     let runcount = 0
     while(true) {
         let item = testQueue.shift()
+        if(!item) break;
         // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-        Tap.test(item.title, (t:any) => {
+        pushers.push(Tap.test(item.title, (t:any) => {
             item.testFunc(t)
-        }).then((res:any) => {
-            console.log('res = ', res)
-        })
+        }))
     }
 }
 

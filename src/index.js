@@ -112,13 +112,20 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!queueTimer) {
-            queueTimer = setTimeout(executeQueue, 3000);
-        }
-        queueTheTest(title, testFunc);
+        pushers.push(new Promise(resolve => {
+            if (!queueTimer) {
+                queueTimer = setTimeout(() => {
+                    executeQueue;
+                    resolve('');
+                }, 3000);
+            }
+            queueTheTest(title, testFunc);
+        }));
+        return Promise.all(pushers);
     });
 }
 exports.runRemoteTest = runRemoteTest;
+let pushers = [];
 let queueTimer;
 const testQueue = [];
 function queueTheTest(title, testFunc) {
@@ -131,12 +138,12 @@ function executeQueue() {
         let runcount = 0;
         while (true) {
             let item = testQueue.shift();
+            if (!item)
+                break;
             // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-            tap_1.default.test(item.title, (t) => {
+            pushers.push(tap_1.default.test(item.title, (t) => {
                 item.testFunc(t);
-            }).then((res) => {
-                console.log('res = ', res);
-            });
+            }));
         }
     });
 }
