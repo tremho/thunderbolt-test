@@ -113,7 +113,11 @@ exports.endTest = endTest;
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         stream = new WSServer_1.WSServer();
-        yield stream.listen();
+        let lr = yield stream.listen();
+        if (!lr) {
+            console.error('ERROR: Only one remote test can exist in a test suite');
+            process.exit(1);
+        }
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
         });

@@ -91,7 +91,11 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
-    await stream.listen()
+    let lr = await stream.listen()
+    if(!lr) {
+        console.error('ERROR: Only one remote test can exist in a test suite')
+        process.exit(1)
+    }
     setEndResolver(() => {
         process.exit(0)
     })
