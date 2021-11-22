@@ -102,10 +102,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     // queueTheTest(title, testFunc)
     // }))
     //
-    // return Promise.all(pushers)
-    return Tap.test(title, (t:any) => {
+    pushers.push(Tap.test(title, (t:any) => {
         testFunc(t)
-    })
+    }))
+    return Promise.all(pushers)
 }
 
 let pushers:any[] = []

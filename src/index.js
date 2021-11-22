@@ -123,10 +123,10 @@ function runRemoteTest(title, testFunc) {
         // queueTheTest(title, testFunc)
         // }))
         //
-        // return Promise.all(pushers)
-        return tap_1.default.test(title, (t) => {
+        pushers.push(tap_1.default.test(title, (t) => {
             testFunc(t);
-        });
+        }));
+        return Promise.all(pushers);
     });
 }
 exports.runRemoteTest = runRemoteTest;
