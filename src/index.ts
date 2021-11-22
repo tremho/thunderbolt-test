@@ -91,6 +91,9 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
     count++
+    stream = new WSServer()
+    await stream.listen()
+
     return Tap.test(title+ ' '+count, (t:any) => {
         testFunc(t)
     })

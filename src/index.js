@@ -113,6 +113,8 @@ exports.endTest = endTest;
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         count++;
+        stream = new WSServer_1.WSServer();
+        yield stream.listen();
         return tap_1.default.test(title + ' ' + count, (t) => {
             testFunc(t);
         });
