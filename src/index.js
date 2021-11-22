@@ -131,11 +131,14 @@ function executeQueue() {
         let runcount = 0;
         while (true) {
             let item = testQueue.shift();
-            if (!item)
-                break;
+            if (!item) {
+                process.exit(0);
+            }
             // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
             tap_1.default.test(item.title, (t) => {
-                item.testFunc(t);
+                item.testFunc(t).then((res) => {
+                    console.log('res = ', res);
+                });
             });
         }
     });
