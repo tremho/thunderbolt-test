@@ -172,7 +172,7 @@ function createCurrentReportFolder() {
         let lnpth = path_1.default.join(rootPath, 'report', 'latest');
         if (fs_1.default.existsSync(lnpth))
             fs_1.default.unlinkSync(lnpth);
-        fs_1.default.linkSync(folderPath, lnpth);
+        fs_1.default.symlinkSync(folderPath, lnpth);
         return folderPath;
     }
     else {

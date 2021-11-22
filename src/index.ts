@@ -146,7 +146,7 @@ function createCurrentReportFolder() {
         fs.mkdirSync(folderPath, {recursive:true})
         let lnpth = path.join(rootPath, 'report', 'latest')
         if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
-        fs.linkSync(folderPath, lnpth)
+        fs.symlinkSync(folderPath, lnpth)
         return folderPath
     } else {
         console.error('TEST REPORT: Root path not detected at ', rootPath)
