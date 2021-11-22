@@ -95,7 +95,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
 
     if(!previous) {
         console.log('first Previous wait')
-        previous = new Promise(resolve => { setTimeout(resolve, 5000)})
+        previous = Promise.resolve()
     }
     console.log('>>>>>>>>>>>> awaiting previous...', Date.now())
     await previous

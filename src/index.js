@@ -116,7 +116,7 @@ function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!previous) {
             console.log('first Previous wait');
-            previous = new Promise(resolve => { setTimeout(resolve, 5000); });
+            previous = Promise.resolve();
         }
         console.log('>>>>>>>>>>>> awaiting previous...', Date.now());
         yield previous;
