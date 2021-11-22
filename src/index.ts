@@ -91,13 +91,19 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
-    if(!queueTimer) {
-        queueTimer = setTimeout(()=>{
-            executeQueue
+    let p: any = new Promise(resolve => {
+        if (!queueTimer) {
+            queueTimer = setTimeout(() => {
+                executeQueue
+                resolve(true)
+            }, 3000)
+        }
+        queueTheTest(title, testFunc)
+
+        return p.then(() => {
             return Promise.all(pushers)
-        }, 3000)
-    }
-    queueTheTest(title, testFunc)
+        })
+    })
 }
 
 let pushers:any[] = []

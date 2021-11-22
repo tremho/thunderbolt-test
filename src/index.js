@@ -112,13 +112,18 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!queueTimer) {
-            queueTimer = setTimeout(() => {
-                executeQueue;
+        let p = new Promise(resolve => {
+            if (!queueTimer) {
+                queueTimer = setTimeout(() => {
+                    executeQueue;
+                    resolve(true);
+                }, 3000);
+            }
+            queueTheTest(title, testFunc);
+            return p.then(() => {
                 return Promise.all(pushers);
-            }, 3000);
-        }
-        queueTheTest(title, testFunc);
+            });
+        });
     });
 }
 exports.runRemoteTest = runRemoteTest;
