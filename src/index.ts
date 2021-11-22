@@ -116,7 +116,7 @@ function queueTheTest(title:string, testFunc:any) {
 
 async function executeQueue() {
     stream = new WSServer()
-    await stream.listen()
+    // await stream.listen()
 
     let runcount = 0
     while(true) {

@@ -134,7 +134,7 @@ function queueTheTest(title, testFunc) {
 function executeQueue() {
     return __awaiter(this, void 0, void 0, function* () {
         stream = new WSServer_1.WSServer();
-        yield stream.listen();
+        // await stream.listen()
         let runcount = 0;
         while (true) {
             let item = testQueue.shift();
