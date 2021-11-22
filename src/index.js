@@ -114,15 +114,15 @@ function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         stream = new WSServer_1.WSServer();
         let cf = yield stream.listen();
-        if (!cf) {
-            console.error('test "' + title + '" is skipped');
-            return process.exit(1);
-        }
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
         });
         return tap_1.default.test(title, (t) => {
-            testFunc(t);
+            if (cf)
+                testFunc(t);
+            else {
+                t.ok(false, 'Only one Remote Test in a test suite is allowed. This test is skipped.');
+            }
         });
     });
 }

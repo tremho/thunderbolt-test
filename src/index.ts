@@ -92,15 +92,14 @@ export async function endTest(t:any = null) {
 export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     let cf = await stream.listen()
-    if(!cf) {
-        console.error('test "'+title+'" is skipped')
-        return process.exit(1)
-    }
     setEndResolver(() => {
         process.exit(0)
     })
     return Tap.test(title, (t:any) => {
-        testFunc(t)
+        if(cf) testFunc(t)
+        else {
+            t.ok(false, 'Only one Remote Test in a test suite is allowed. This test is skipped.')
+        }
     })
 }
 
