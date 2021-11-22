@@ -52,8 +52,6 @@ export async function callRemote(action:string) {
 export async function startTest(t:any = null) {
 
     console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
-    let a:any = null
-    a.foo = 'bar' // this should crash
     desc = 'stream connect'
     r = !!stream
     x = true
@@ -69,8 +67,6 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     console.log('endTest called', prevResolve)
-    let a:any = null
-    a.foo = 'bar' // this should crash
     if(t) t.end()
     if(prevResolve) {
         console.log('ending previous flow gate')
