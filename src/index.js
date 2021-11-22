@@ -113,12 +113,14 @@ exports.endTest = endTest;
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         count++;
-        stream = new WSServer_1.WSServer();
-        yield stream.listen();
+        // stream = new WSServer()
+        // await stream.listen()
+        //
         let res;
-        let p = new Promise(resolve => {
-            (0, WSServer_1.setEndResolver)(resolve);
-        });
+        // let p = new Promise(resolve => {
+        //     setEndResolver(resolve)
+        // })
+        let p = Promise.resolve();
         res = tap_1.default.test(title, (t) => {
             testFunc(t);
         });

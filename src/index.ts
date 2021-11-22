@@ -91,13 +91,14 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
     count++
-    stream = new WSServer()
-    await stream.listen()
-
+    // stream = new WSServer()
+    // await stream.listen()
+    //
     let res:any;
-    let p = new Promise(resolve => {
-        setEndResolver(resolve)
-    })
+    // let p = new Promise(resolve => {
+    //     setEndResolver(resolve)
+    // })
+    let p = Promise.resolve()
     res = Tap.test(title, (t: any) => {
         testFunc(t)
     })
