@@ -133,9 +133,9 @@ function executeQueue() {
             let item = testQueue.shift();
             // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
             tap_1.default.test(item.title, (t) => {
-                item.testFunc(t).then((res) => {
-                    console.log('res = ', res);
-                });
+                item.testFunc(t);
+            }).then((res) => {
+                console.log('res = ', res);
             });
         }
     });
