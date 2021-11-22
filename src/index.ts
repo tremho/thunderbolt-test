@@ -111,9 +111,6 @@ async function executeQueue() {
     let runcount = 0
     while(true) {
         let item = testQueue.shift()
-        if(!item) {
-            process.exit(0)
-        }
         // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
         Tap.test(item.title, (t:any) => {
             item.testFunc(t).then((res:any) => {
