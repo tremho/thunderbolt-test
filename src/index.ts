@@ -125,22 +125,56 @@ function saveReport(report:string) {
     }
 }
 
+function createCurrentReportFolder() {
+    const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    let dt = new Date()
+    let nm = `${month[dt.getMonth()]}-${dt.getDate()}`
+    const rootPath = path.resolve('.')
+    let cpth:string = path.join(rootPath, 'report', nm)
+    // console.log("TEST REPORT ROOT PATH", rootPath)
+    if(fs.existsSync(path.join(rootPath, 'package.json'))) {
+        let ordinal = 0
+        let cpth:string = path.join(rootPath, 'report', nm)
+        while (++ordinal) {
+            cpth = path.join(rootPath, 'report', nm, '' + ordinal)
+            if (!fs.existsSync(cpth)) {
+                break;
+            }
+        }
+        const folderPath = path.join(cpth, 'electron')
+        fs.mkdirSync(folderPath, {recursive:true})
+        let lnpth = path.join(rootPath, 'report', 'latest')
+        if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
+        fs.linkSync(folderPath, lnpth)
+        return folderPath
+    } else {
+        console.error('TEST REPORT: Root path not detected at ', rootPath)
+    }
+}
+
 // this is a duplicate of similar function found in TestActions (per platform)
 function getCurrentReportFolder(rootPath:string) {
     const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     let dt = new Date()
     let nm = `${month[dt.getMonth()]}-${dt.getDate()}`
-    let ordinal = 0
     let cpth:string = path.join(rootPath, 'report', nm)
-    while (++ordinal) {
-        cpth = path.join(rootPath, 'report', nm, '' + ordinal)
-        if (!fs.existsSync(cpth)) {
-            break;
+
+    if(fs.existsSync(path.join(rootPath, 'package.json'))) {
+        let ordinal = 0
+        let cpth:string = path.join(rootPath, 'report', nm)
+        let ppath:string;
+        while (++ordinal) {
+            ppath = cpth
+            cpth = path.join(rootPath, 'report', nm, '' + ordinal)
+            if (!fs.existsSync(cpth)) {
+                cpth = ppath
+                break;
+            }
         }
+    } else {
+        console.error('TEST REPORT: Root path not detected at ', rootPath)
     }
-    let lnpth = path.join(rootPath, 'report', 'latest')
-    if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
-    fs.linkSync(cpth, lnpth)
-    return cpth
+    const folderPath = path.join(cpth, 'electron')
+    return folderPath
 }
 
