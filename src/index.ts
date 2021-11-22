@@ -68,12 +68,11 @@ export async function startTest(t:any = null) {
 export async function endTest(t:any = null) {
     console.log('endTest called', prevResolve)
     let a:any = null
-    a.foo = 'bar'
-    return
+    a.foo = 'bar' // this should crash
     if(t) t.end()
     if(prevResolve) {
         console.log('ending previous flow gate')
-        // prevResolve()
+        prevResolve()
     }
     if(!--runcount) {
         let report:any = await stream.sendDirective('getReport')

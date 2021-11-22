@@ -88,13 +88,12 @@ function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('endTest called', prevResolve);
         let a = null;
-        a.foo = 'bar';
-        return;
+        a.foo = 'bar'; // this should crash
         if (t)
             t.end();
         if (prevResolve) {
             console.log('ending previous flow gate');
-            // prevResolve()
+            prevResolve();
         }
         if (!--runcount) {
             let report = yield stream.sendDirective('getReport');
