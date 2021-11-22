@@ -133,7 +133,7 @@ function executeQueue() {
             let item = testQueue.shift();
             if (!item)
                 break;
-            yield stream.sendDirective('startReport ' + (runcount++) + ' "' + item.title + '"');
+            // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
             tap_1.default.test(item.title, (t) => {
                 item.testFunc(t);
             });
