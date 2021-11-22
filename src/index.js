@@ -86,6 +86,7 @@ exports.startTest = startTest;
  */
 function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('endTest called', prevResolve);
         if (t)
             t.end();
         if (prevResolve) {

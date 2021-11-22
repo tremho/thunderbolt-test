@@ -66,6 +66,7 @@ export async function startTest(t:any = null) {
  * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
 export async function endTest(t:any = null) {
+    console.log('endTest called', prevResolve)
     if(t) t.end()
     if(prevResolve) {
         console.log('ending previous flow gate')
