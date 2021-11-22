@@ -102,10 +102,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     queueTheTest(title, testFunc)
     }))
 
-    return res
+    return Promise.all(pushers)
 
 }
-let res:any
+
 let pushers:any[] = []
 let queueTimer:any;
 const testQueue:any[] = []
@@ -123,9 +123,10 @@ async function executeQueue() {
         let item = testQueue.shift()
         if(!item) break;
         // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-        res = Tap.test(item.title, (t:any) => {
+        pushers.push(Tap.test(item.title, (t:any) => {
+            console.log('running test Function for '+item.title)
             item.testFunc(t)
-        })
+        }))
     }
 }
 

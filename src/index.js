@@ -121,11 +121,10 @@ function runRemoteTest(title, testFunc) {
             }
             queueTheTest(title, testFunc);
         }));
-        return res;
+        return Promise.all(pushers);
     });
 }
 exports.runRemoteTest = runRemoteTest;
-let res;
 let pushers = [];
 let queueTimer;
 const testQueue = [];
@@ -142,9 +141,10 @@ function executeQueue() {
             if (!item)
                 break;
             // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-            res = tap_1.default.test(item.title, (t) => {
+            pushers.push(tap_1.default.test(item.title, (t) => {
+                console.log('running test Function for ' + item.title);
                 item.testFunc(t);
-            });
+            }));
         }
     });
 }
