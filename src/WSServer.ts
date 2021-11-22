@@ -25,8 +25,8 @@ export class WSServer {
             if(wss) {
                 wss.on('error', (e:Error) => {
                     if((e as any).code === 'EADDRINUSE') {
-                        console.warn('Server is busy, please wait...')
-                        return resolve(false)
+                        console.warn('Only one Remote Test call per test suite is allowed')
+                        return
                     }
                     console.error("WS SERVER ERROR", e)
                     resolve(false)
