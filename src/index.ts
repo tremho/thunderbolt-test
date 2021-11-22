@@ -51,7 +51,7 @@ export async function callRemote(action:string) {
  */
 export async function startTest(t:any = null) {
 
-    console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
+    // console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
     desc = 'stream connect'
     r = !!stream
     x = true
@@ -68,15 +68,10 @@ export async function startTest(t:any = null) {
 export async function endTest(t:any = null) {
     console.log('endTest called', prevResolve)
     if(t) t.end()
-    if(prevResolve) {
-        console.log('ending previous flow gate')
-        prevResolve()
-    }
-    if(!--runcount) {
-        let report:any = await stream.sendDirective('getReport')
-        report = report.replace(/--/g, '=')
-        saveReport(report)
-    }
+    let report:any = await stream.sendDirective('getReport')
+    report = report.replace(/--/g, '=')
+    saveReport(report)
+
     return stream.sendDirective('end')
 }
 
@@ -95,10 +90,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     setEndResolver(() => {
         process.exit(0)
     })
-    return Tap.test(title, (t:any) => {
+    return Tap.test('Remote E2E: '+title, (t:any) => {
         if(cf) testFunc(t)
         else {
-            t.ok(false, 'Only one Remote Test in a test suite is allowed. This test is skipped.')
+            t.ok(false, 'Only one Remote Test in a test suite is allowed.')
         }
     })
 }

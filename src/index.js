@@ -68,7 +68,7 @@ exports.callRemote = callRemote;
  */
 function startTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%");
+        // console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
         desc = 'stream connect';
         r = !!stream;
         x = true;
@@ -89,15 +89,9 @@ function endTest(t = null) {
         console.log('endTest called', prevResolve);
         if (t)
             t.end();
-        if (prevResolve) {
-            console.log('ending previous flow gate');
-            prevResolve();
-        }
-        if (!--runcount) {
-            let report = yield stream.sendDirective('getReport');
-            report = report.replace(/--/g, '=');
-            saveReport(report);
-        }
+        let report = yield stream.sendDirective('getReport');
+        report = report.replace(/--/g, '=');
+        saveReport(report);
         return stream.sendDirective('end');
     });
 }
@@ -117,11 +111,11 @@ function runRemoteTest(title, testFunc) {
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
         });
-        return tap_1.default.test(title, (t) => {
+        return tap_1.default.test('Remote E2E: ' + title, (t) => {
             if (cf)
                 testFunc(t);
             else {
-                t.ok(false, 'Only one Remote Test in a test suite is allowed. This test is skipped.');
+                t.ok(false, 'Only one Remote Test in a test suite is allowed.');
             }
         });
     });
