@@ -90,7 +90,7 @@ function endTest(t = null) {
             t.end();
         if (prevResolve) {
             console.log('ending previous flow gate');
-            prevResolve();
+            // prevResolve()
         }
         if (!--runcount) {
             let report = yield stream.sendDirective('getReport');
