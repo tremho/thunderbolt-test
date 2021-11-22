@@ -108,7 +108,7 @@ function executeQueue() {
     while(true) {
         let item = testQueue.shift()
         if(!item) break;
-        Tap.test(item.title, t => {
+        Tap.test(item.title, (t:any) => {
             item.testFunc(t)
         })
     }

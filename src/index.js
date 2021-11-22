@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
-const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 let stream;
@@ -112,29 +111,28 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!previous) {
-            console.log('first Previous wait');
-            previous = Promise.resolve();
+        if (!queueTimer) {
+            queueTimer = setTimeout(executeQueue, 3000);
         }
-        console.log('>>>>>>>>>>>> awaiting previous...', Date.now());
-        yield previous;
-        console.log('<<<<<<<<<<< past previous', Date.now());
-        previous = new Promise(resolve => {
-            prevResolve = resolve;
-        });
-        console.log('Run Remote Test, runcount=', runcount);
-        stream = new WSServer_1.WSServer();
-        if (!runcount) {
-            yield stream.listen();
-        }
-        yield stream.sendDirective('startReport ' + runcount + ' "' + title + '"');
-        runcount++;
-        return tap_1.default.test(title, t => {
-            testFunc(t);
-        });
+        queueTheTest(title, testFunc);
     });
 }
 exports.runRemoteTest = runRemoteTest;
+let queueTimer;
+const testQueue = [];
+function queueTheTest(title, testFunc) {
+    testQueue.push({ title, testFunc });
+}
+function executeQueue() {
+    while (true) {
+        let item = testQueue.shift();
+        if (!item)
+            break;
+        tap_1.default.test(item.title, (t) => {
+            item.testFunc(t);
+        });
+    }
+}
 /**
  * Takes a screenshot of the current page
  *
