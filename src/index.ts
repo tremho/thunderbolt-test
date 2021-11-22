@@ -94,14 +94,18 @@ export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     await stream.listen()
 
-    let res:any;
-    let p = new Promise(resolve => {
-        setEndResolver(resolve)
-        res = Tap.test(title+ ' '+count, (t:any) => {
-            testFunc(t)
-        })
+    // let res:any;
+    // let p = new Promise(resolve => {
+    //     setEndResolver(resolve)
+    //     res = Tap.test(title+ ' '+count, (t:any) => {
+    //         testFunc(t)
+    //     })
+    // })
+    // return p.then(()=> {return res})
+
+    return Tap.test(title, (t:any) =>{
+        testFunc(t)
     })
-    return p.then(()=> {return res})
 
 }
 let count = 0;
