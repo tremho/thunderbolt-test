@@ -111,6 +111,7 @@ function runRemoteTest(title, testFunc) {
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
         });
+        yield stream.sendDirective('startReport ' + title);
         return tap_1.default.test('Remote E2E: ' + title, (t) => {
             if (cf)
                 testFunc(t);

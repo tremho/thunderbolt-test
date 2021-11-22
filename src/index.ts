@@ -90,6 +90,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     setEndResolver(() => {
         process.exit(0)
     })
+    await stream.sendDirective('startReport '+title)
     return Tap.test('Remote E2E: '+title, (t:any) => {
         if(cf) testFunc(t)
         else {
