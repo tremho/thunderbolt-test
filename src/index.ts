@@ -52,6 +52,8 @@ export async function callRemote(action:string) {
 export async function startTest(t:any = null) {
 
     console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%")
+    let a:any = null
+    a.foo = 'bar' // this should crash
     desc = 'stream connect'
     r = !!stream
     x = true

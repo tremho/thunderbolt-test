@@ -69,6 +69,8 @@ exports.callRemote = callRemote;
 function startTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("%%%%%%%%%%%%%% startTest directive called %%%%%%%%%%%%%%%");
+        let a = null;
+        a.foo = 'bar'; // this should crash
         desc = 'stream connect';
         r = !!stream;
         x = true;
