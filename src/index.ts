@@ -91,29 +91,28 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
-    if(!previous) {
-        console.log('first Previous wait')
-        previous = Promise.resolve()
+    if(!queueTimer) {
+        queueTimer = setTimeout(executeQueue, 3000)
     }
-    console.log('>>>>>>>>>>>> awaiting previous...', Date.now())
-    await previous
-    console.log('<<<<<<<<<<< past previous', Date.now())
+    queueTheTest(title, testFunc)
+}
 
-    previous = new Promise(resolve => {
-        prevResolve = resolve
-    })
+let queueTimer:any;
+const testQueue:any[] = []
 
-    console.log('Run Remote Test, runcount=', runcount)
+function queueTheTest(title:string, testFunc:any) {
+    testQueue.push({title, testFunc})
+}
 
-    stream = new WSServer()
-    if(!runcount) {
-        await stream.listen()
+function executeQueue() {
+    while(true) {
+        let item = testQueue.shift()
+        if(!item) break;
+        Tap.test(item.title, t => {
+            item.testFunc(t)
+        })
     }
-    await stream.sendDirective('startReport '+runcount+' "'+title+'"')
-    runcount++
-    return Tap.test(title, t => {
-        testFunc(t)
-    })
+
 }
 
 /**
