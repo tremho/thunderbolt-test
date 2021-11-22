@@ -115,7 +115,7 @@ function saveReport(report:string) {
     // console.log("TEST REPORT ROOT PATH", rootPath)
     if(fs.existsSync(path.join(rootPath, 'package.json'))) {
         const dtf = "current"
-        const folderPath = path.join(rootPath, 'report', 'electron', dtf)
+        const folderPath = path.join(getCurrentReportFolder(rootPath), 'electron')
         fs.mkdirSync(folderPath, {recursive:true})
         const rptPath = path.join(folderPath, 'report.html')
         // console.log("TEST REPORT PATH", rptPath)
@@ -123,4 +123,23 @@ function saveReport(report:string) {
     } else {
         console.error('TEST REPORT: Root path not detected at ', rootPath)
     }
+}
+
+// this is a duplicate of similar function found in TestActions (per platform)
+function getCurrentReportFolder(rootPath:string) {
+    const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    let dt = new Date()
+    let nm = `${month[dt.getMonth()]}-${dt.getDate()}`
+    let ordinal = 0
+    let cpth = path.join(rootPath, nm, '' + ordinal)
+    while (++ordinal) {
+        if (!fs.existsSync(cpth)) {
+            fs.mkdirSync(cpth, {recursive: true})
+            break;
+        }
+    }
+    let lnpth = path.join(rootPath, 'latest')
+    if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
+    fs.linkSync(cpth, lnpth)
+    return cpth
 }
