@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
+exports.screenshot = exports.executeQueue = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
@@ -112,17 +112,7 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        stream = new WSServer_1.WSServer();
-        let sr = yield stream.listen();
-        if (sr) {
-            count = 0;
-        }
-        else {
-            count++;
-        }
-        return tap_1.default.test(title + ' ' + count, (t) => {
-            testFunc(t);
-        });
+        queueTheTest(title, testFunc);
     });
 }
 exports.runRemoteTest = runRemoteTest;
@@ -136,7 +126,7 @@ function queueTheTest(title, testFunc) {
 function executeQueue() {
     return __awaiter(this, void 0, void 0, function* () {
         stream = new WSServer_1.WSServer();
-        // await stream.listen()
+        yield stream.listen();
         let runcount = 0;
         while (true) {
             let item = testQueue.shift();
@@ -150,6 +140,7 @@ function executeQueue() {
         }
     });
 }
+exports.executeQueue = executeQueue;
 /**
  * Takes a screenshot of the current page
  *
