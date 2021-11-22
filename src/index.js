@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
+const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 let stream;
@@ -124,14 +125,20 @@ function queueTheTest(title, testFunc) {
     testQueue.push({ title, testFunc });
 }
 function executeQueue() {
-    while (true) {
-        let item = testQueue.shift();
-        if (!item)
-            break;
-        tap_1.default.test(item.title, (t) => {
-            item.testFunc(t);
-        });
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        stream = new WSServer_1.WSServer();
+        yield stream.listen();
+        let runcount = 0;
+        while (true) {
+            let item = testQueue.shift();
+            if (!item)
+                break;
+            yield stream.sendDirective('startReport ' + (runcount++) + ' "' + item.title + '"');
+            tap_1.default.test(item.title, (t) => {
+                item.testFunc(t);
+            });
+        }
+    });
 }
 /**
  * Takes a screenshot of the current page

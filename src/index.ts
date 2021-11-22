@@ -104,10 +104,15 @@ function queueTheTest(title:string, testFunc:any) {
     testQueue.push({title, testFunc})
 }
 
-function executeQueue() {
+async function executeQueue() {
+    stream = new WSServer()
+    await stream.listen()
+
+    let runcount = 0
     while(true) {
         let item = testQueue.shift()
         if(!item) break;
+        await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
         Tap.test(item.title, (t:any) => {
             item.testFunc(t)
         })
