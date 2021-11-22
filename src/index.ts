@@ -94,6 +94,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
     let cf = await stream.listen()
     if(!cf) {
         console.error('test "'+title+'" is skipped')
+        return process.exit(1)
     }
     setEndResolver(() => {
         process.exit(0)

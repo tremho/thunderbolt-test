@@ -116,6 +116,7 @@ function runRemoteTest(title, testFunc) {
         let cf = yield stream.listen();
         if (!cf) {
             console.error('test "' + title + '" is skipped');
+            return process.exit(1);
         }
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
