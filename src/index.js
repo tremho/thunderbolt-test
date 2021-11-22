@@ -119,11 +119,10 @@ function runRemoteTest(title, testFunc) {
         let p = new Promise(resolve => {
             (0, WSServer_1.setEndResolver)(resolve);
         });
-        return p.then(() => {
-            return tap_1.default.test(title, (t) => {
-                testFunc(t);
-            });
+        res = tap_1.default.test(title, (t) => {
+            testFunc(t);
         });
+        return p.then(() => { return res; });
     });
 }
 exports.runRemoteTest = runRemoteTest;

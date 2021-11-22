@@ -98,11 +98,10 @@ export async function runRemoteTest(title:string, testFunc:any) {
     let p = new Promise(resolve => {
         setEndResolver(resolve)
     })
-    return p.then(()=> {
-        return Tap.test(title, (t: any) => {
-            testFunc(t)
-        })
+    res = Tap.test(title, (t: any) => {
+        testFunc(t)
     })
+    return p.then(()=> { return res})
 }
 let count = 0;
 let pushers:any[] = []
