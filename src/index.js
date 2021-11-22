@@ -113,9 +113,8 @@ exports.endTest = endTest;
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         count++;
-        // stream = new WSServer()
-        // await stream.listen()
-        //
+        stream = new WSServer_1.WSServer();
+        yield stream.listen();
         let res;
         // let p = new Promise(resolve => {
         //     setEndResolver(resolve)
