@@ -156,14 +156,14 @@ function getCurrentReportFolder(rootPath) {
     let dt = new Date();
     let nm = `${month[dt.getMonth()]}-${dt.getDate()}`;
     let ordinal = 0;
-    let cpth = path_1.default.join(rootPath, 'report', nm, '' + ordinal);
+    let cpth = path_1.default.join(rootPath, 'report', nm);
     while (++ordinal) {
+        cpth = path_1.default.join(rootPath, 'report', nm, '' + ordinal);
         if (!fs_1.default.existsSync(cpth)) {
-            fs_1.default.mkdirSync(cpth, { recursive: true });
             break;
         }
     }
-    let lnpth = path_1.default.join(rootPath, 'latest');
+    let lnpth = path_1.default.join(rootPath, 'report', 'latest');
     if (fs_1.default.existsSync(lnpth))
         fs_1.default.unlinkSync(lnpth);
     fs_1.default.linkSync(cpth, lnpth);
