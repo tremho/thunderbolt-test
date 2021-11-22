@@ -67,6 +67,8 @@ export async function startTest(t:any = null) {
  */
 export async function endTest(t:any = null) {
     console.log('endTest called', prevResolve)
+    let a:any = null
+    a.foo = 'bar'
     return
     if(t) t.end()
     if(prevResolve) {
