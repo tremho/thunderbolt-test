@@ -90,19 +90,17 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    count++
     stream = new WSServer()
-    await stream.listen()
+    let sr = await stream.listen()
+    if(sr) {
+        count = 0
+    } else {
+        count++
+    }
 
-    let res:any;
-    // let p = new Promise(resolve => {
-    //     setEndResolver(resolve)
-    // })
-    let p = Promise.resolve()
-    res = Tap.test(title, (t: any) => {
+    return Tap.test(title+' '+count, (t: any) => {
         testFunc(t)
     })
-    return p.then(()=> { return res})
 }
 let count = 0;
 let pushers:any[] = []
