@@ -120,9 +120,9 @@ function runRemoteTest(title, testFunc) {
                 }, 3000);
             }
             queueTheTest(title, testFunc);
-            return p.then(() => {
-                return Promise.all(pushers);
-            });
+        });
+        return p.then(() => {
+            return Promise.all(pushers);
         });
     });
 }

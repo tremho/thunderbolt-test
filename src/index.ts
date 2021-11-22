@@ -99,10 +99,9 @@ export async function runRemoteTest(title:string, testFunc:any) {
             }, 3000)
         }
         queueTheTest(title, testFunc)
-
-        return p.then(() => {
-            return Promise.all(pushers)
-        })
+    })
+    return p.then(() => {
+        return Promise.all(pushers)
     })
 }
 
