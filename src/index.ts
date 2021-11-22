@@ -90,6 +90,7 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
+    await listenTimeout()
     return Tap.test(title, (t:any) => {
         testFunc(t)
     })
@@ -101,6 +102,14 @@ const testQueue:any[] = []
 
 function queueTheTest(title:string, testFunc:any) {
     testQueue.push({title, testFunc})
+}
+
+async function listenTimeout() {
+    stream = new WSServer()
+    let p = new Promise(resolve => {
+        setTimeout(resolve, 3000)
+    })
+    return Promise.race([p, stream.listen()])
 }
 
 async function executeQueue() {

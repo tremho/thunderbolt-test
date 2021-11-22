@@ -112,6 +112,7 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
+        yield listenTimeout();
         return tap_1.default.test(title, (t) => {
             testFunc(t);
         });
@@ -124,6 +125,15 @@ let queueTimer;
 const testQueue = [];
 function queueTheTest(title, testFunc) {
     testQueue.push({ title, testFunc });
+}
+function listenTimeout() {
+    return __awaiter(this, void 0, void 0, function* () {
+        stream = new WSServer_1.WSServer();
+        let p = new Promise(resolve => {
+            setTimeout(resolve, 3000);
+        });
+        return Promise.race([p, stream.listen()]);
+    });
 }
 function executeQueue() {
     return __awaiter(this, void 0, void 0, function* () {
