@@ -85,6 +85,7 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
+    createCurrentReportFolder()
     stream = new WSServer()
     let cf = await stream.listen()
     setEndResolver(() => {

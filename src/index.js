@@ -106,6 +106,7 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
+        createCurrentReportFolder();
         stream = new WSServer_1.WSServer();
         let cf = yield stream.listen();
         (0, WSServer_1.setEndResolver)(() => {
