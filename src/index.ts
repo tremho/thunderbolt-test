@@ -91,7 +91,10 @@ export async function endTest(t:any = null) {
  */
 export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
-    await stream.listen()
+    let cf = await stream.listen()
+    if(!cf) {
+        console.error('test "'+title+'" is skipped')
+    }
     setEndResolver(() => {
         process.exit(0)
     })

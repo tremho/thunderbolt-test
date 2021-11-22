@@ -26,7 +26,7 @@ export class WSServer {
                 wss.on('error', (e:Error) => {
                     if((e as any).code === 'EADDRINUSE') {
                         console.warn('Only one Remote Test call per test suite is allowed')
-                        return
+                        return resolve(false)
                     }
                     console.error("WS SERVER ERROR", e)
                     resolve(false)

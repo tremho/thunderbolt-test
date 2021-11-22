@@ -113,7 +113,10 @@ exports.endTest = endTest;
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
         stream = new WSServer_1.WSServer();
-        yield stream.listen();
+        let cf = yield stream.listen();
+        if (!cf) {
+            console.error('test "' + title + '" is skipped');
+        }
         (0, WSServer_1.setEndResolver)(() => {
             process.exit(0);
         });
