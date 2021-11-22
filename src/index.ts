@@ -92,6 +92,9 @@ export async function endTest(t:any = null) {
 export async function runRemoteTest(title:string, testFunc:any) {
     stream = new WSServer()
     await stream.listen()
+    setEndResolver(() => {
+        process.exit(0)
+    })
     return Tap.test(title, (t:any) => {
         testFunc(t)
     })
