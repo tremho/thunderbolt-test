@@ -141,9 +141,9 @@ function executeQueue() {
             if (!item)
                 break;
             // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-            pushers.push(tap_1.default.test(item.title, (t) => {
+            tap_1.default.test(item.title, (t) => {
                 item.testFunc(t);
-            }));
+            });
         }
     });
 }

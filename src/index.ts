@@ -123,9 +123,9 @@ async function executeQueue() {
         let item = testQueue.shift()
         if(!item) break;
         // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-        pushers.push(Tap.test(item.title, (t:any) => {
+        Tap.test(item.title, (t:any) => {
             item.testFunc(t)
-        }))
+        })
     }
 }
 
