@@ -112,46 +112,14 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield listenTimeout();
+        stream = new WSServer_1.WSServer();
+        yield stream.listen();
         return tap_1.default.test(title, (t) => {
             testFunc(t);
         });
     });
 }
 exports.runRemoteTest = runRemoteTest;
-let count = 0;
-let pushers = [];
-let queueTimer;
-const testQueue = [];
-function queueTheTest(title, testFunc) {
-    testQueue.push({ title, testFunc });
-}
-function listenTimeout() {
-    return __awaiter(this, void 0, void 0, function* () {
-        stream = new WSServer_1.WSServer();
-        let p = new Promise(resolve => {
-            setTimeout(resolve, 3000);
-        });
-        return Promise.race([p, stream.listen()]);
-    });
-}
-function executeQueue() {
-    return __awaiter(this, void 0, void 0, function* () {
-        stream = new WSServer_1.WSServer();
-        yield stream.listen();
-        let runcount = 0;
-        while (true) {
-            let item = testQueue.shift();
-            if (!item)
-                break;
-            // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-            pushers.push(tap_1.default.test(item.title, (t) => {
-                console.log('running test Function for ' + item.title);
-                item.testFunc(t);
-            }));
-        }
-    });
-}
 /**
  * Takes a screenshot of the current page
  *

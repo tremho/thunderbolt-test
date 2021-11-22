@@ -90,42 +90,11 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    await listenTimeout()
+    stream = new WSServer()
+    await stream.listen()
     return Tap.test(title, (t:any) => {
         testFunc(t)
     })
-}
-let count = 0;
-let pushers:any[] = []
-let queueTimer:any;
-const testQueue:any[] = []
-
-function queueTheTest(title:string, testFunc:any) {
-    testQueue.push({title, testFunc})
-}
-
-async function listenTimeout() {
-    stream = new WSServer()
-    let p = new Promise(resolve => {
-        setTimeout(resolve, 3000)
-    })
-    return Promise.race([p, stream.listen()])
-}
-
-async function executeQueue() {
-    stream = new WSServer()
-    await stream.listen()
-
-    let runcount = 0
-    while(true) {
-        let item = testQueue.shift()
-        if(!item) break;
-        // await stream.sendDirective('startReport '+(runcount++)+' "'+item.title+'"')
-        pushers.push(Tap.test(item.title, (t:any) => {
-            console.log('running test Function for '+item.title)
-            item.testFunc(t)
-        }))
-    }
 }
 
 /**
