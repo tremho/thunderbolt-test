@@ -27,7 +27,6 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             width,
             height,
             countDiff: delta,
-            message: (ok ? 'image matches' : 'image does not match') + ` (${pct}% difference)`,
             percentDiff: pct,
             diffPath
         }
@@ -38,7 +37,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
 
 export function compareToComp(imgName:string, passingPct:number) {
 
+    let plat = 'electron' // todo
+
     let imgPath1 = path.join('report', 'latest', 'images', imgName)
-    let imgPath2 = path.join('report', 'comp', imgName)
+    let imgPath2 = path.join('report', 'comp', plat, imgName)
     return compareImages(imgPath1, imgPath2, passingPct)
 }
