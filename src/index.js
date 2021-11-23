@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
+exports.compare = exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const imageComp_1 = require("./imageComp");
 let stream;
 let desc, r, x;
 let runcount = 0;
@@ -136,6 +137,17 @@ function screenshot(name) {
     });
 }
 exports.screenshot = screenshot;
+/**
+ * Compare a screenshot taken with `screenshot` to a comp file
+ * in the `reports/comp` directory of the same name
+ * @param name Name of the screenshot / comp image
+ */
+function compare(name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return (0, imageComp_1.compareToComp)(name + ".png");
+    });
+}
+exports.compare = compare;
 function saveReport(report) {
     const rootPath = path_1.default.resolve('.');
     // console.log("TEST REPORT ROOT PATH", rootPath)

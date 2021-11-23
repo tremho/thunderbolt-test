@@ -4,6 +4,8 @@ import {WSServer,setEndResolver} from "./WSServer"
 import path from "path";
 import fs from "fs";
 
+import {compareToComp} from "./imageComp";
+
 
 let stream:WSServer
 let desc: string, r:any, x: any
@@ -109,6 +111,16 @@ export async function runRemoteTest(title:string, testFunc:any) {
  */
 export async function screenshot(name:string) {
     return await callRemote('screenshot '+name)
+}
+
+/**
+ * Compare a screenshot taken with `screenshot` to a comp file
+ * in the `reports/comp` directory of the same name
+ * @param name Name of the screenshot / comp image
+ */
+export async function compare(name:string) {
+    return compareToComp(name+".png")
+
 }
 
 function saveReport(report:string) {

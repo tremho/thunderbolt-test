@@ -47,3 +47,9 @@ export declare function runRemoteTest(title: string, testFunc: any): Promise<voi
  * @param name Name to give this image
  */
 export declare function screenshot(name: string): Promise<unknown>;
+/**
+ * Compare a screenshot taken with `screenshot` to a comp file
+ * in the `reports/comp` directory of the same name
+ * @param name Name of the screenshot / comp image
+ */
+export declare function compare(name: string): Promise<unknown>;
