@@ -5,13 +5,16 @@ const path = require('path')
 export function compareImages(imgPath1:string, imgPath2:string) {
     console.log('-->CompareImages ', imgPath1, imgPath2)
     return new Promise(resolve => {
-    const api = resemble(imgPath1).compareTo(imgPath2)
-        .ignoreAntialiasing()
-        .onComplete((data:any) => {
-            console.log(data)
+    // const api = resemble(imgPath1).compareTo(imgPath2)
+    //     .ignoreAntialiasing()
+    //     .onComplete((data:any) => {
+    //         console.log(data)
+        let data = {
+            message: 'not implemented. Not working.'
+        }
             resolve(data)
         })
-    })
+    // })
 }
 
 export function compareToComp(imgName:string) {
