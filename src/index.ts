@@ -120,8 +120,8 @@ export async function screenshot(name:string) {
  */
 export async function compare(t:any, name:string) {
     console.log('test: compare --->>')
-    const data:any = await compareToComp(name+".png")
-    let ok = !!data
+    const data:any = await compareToComp(name+".png", 1)
+    let ok = data?.ok
     t.ok(ok, 'compare '+name+': ' + data.message)
     return data
 

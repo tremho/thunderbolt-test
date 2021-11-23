@@ -145,8 +145,8 @@ exports.screenshot = screenshot;
 function compare(t, name) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('test: compare --->>');
-        const data = yield (0, imageComp_1.compareToComp)(name + ".png");
-        let ok = !!data;
+        const data = yield (0, imageComp_1.compareToComp)(name + ".png", 1);
+        let ok = data === null || data === void 0 ? void 0 : data.ok;
         t.ok(ok, 'compare ' + name + ': ' + data.message);
         return data;
     });
