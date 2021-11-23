@@ -52,4 +52,4 @@ export declare function screenshot(name: string): Promise<unknown>;
  * in the `reports/comp` directory of the same name
  * @param name Name of the screenshot / comp image
  */
-export declare function compare(name: string): Promise<unknown>;
+export declare function compare(t: any, name: string): Promise<any>;

@@ -142,10 +142,13 @@ exports.screenshot = screenshot;
  * in the `reports/comp` directory of the same name
  * @param name Name of the screenshot / comp image
  */
-function compare(name) {
+function compare(t, name) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('test: compare --->>');
-        return (0, imageComp_1.compareToComp)(name + ".png");
+        const data = yield (0, imageComp_1.compareToComp)(name + ".png");
+        let ok = !!data;
+        t.ok(ok, 'compare ' + name + ': ' + data.message);
+        return data;
     });
 }
 exports.compare = compare;

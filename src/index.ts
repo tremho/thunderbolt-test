@@ -118,9 +118,12 @@ export async function screenshot(name:string) {
  * in the `reports/comp` directory of the same name
  * @param name Name of the screenshot / comp image
  */
-export async function compare(name:string) {
+export async function compare(t:any, name:string) {
     console.log('test: compare --->>')
-    return compareToComp(name+".png")
+    const data:any = await compareToComp(name+".png")
+    let ok = !!data
+    t.ok(ok, 'compare '+name+': ' + data.message)
+    return data
 
 }
 
