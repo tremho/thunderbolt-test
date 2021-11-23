@@ -1,6 +1,6 @@
 {
   "name": "@tremho/jove-test",
-  "version": "0.6.9-pre-release.192",
+  "version": "0.6.9-pre-release.193",
   "description": "Test API Module for Jove Framework",
   "main": "build/index.js",
   "typings": "./index.d.ts",
@@ -37,8 +37,9 @@
   },
   "homepage": "https://github.com/tremho/thunderbolt-test#readme",
   "dependencies": {
-    "@mirzazeyrek/node-resemble-js": "^1.2.1",
     "@types/tap": "^15.0.5",
+    "pixelmatch": "^5.2.1",
+    "pngjs": "^4.0.1",
     "tap": "^15.0.10",
     "ws": "^8.2.3"
   },

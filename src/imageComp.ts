@@ -1,20 +1,23 @@
 
-const {resemble} = require('@mirzazeyrek/node-resemble-js')
+const fs = require('fs')
 const path = require('path')
+const PNG = require('pngjs').PNG
+const pixelmatch = require('pixelmatch')
 
 export function compareImages(imgPath1:string, imgPath2:string) {
     console.log('-->CompareImages ', imgPath1, imgPath2)
     return new Promise(resolve => {
-    // const api = resemble(imgPath1).compareTo(imgPath2)
-    //     .ignoreAntialiasing()
-    //     .onComplete((data:any) => {
-    //         console.log(data)
-        let data = {
-            message: 'not implemented. Not working.'
-        }
-            resolve(data)
-        })
-    // })
+
+        const img1 = PNG.sync.read(fs.readFileSync(imgPath1));
+        const img2 = PNG.sync.read(fs.readFileSync(imgPath2));
+        const {width, height} = img1;
+        const diff = new PNG({width, height});
+        const delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+        const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.'))+'-diff.png'
+        fs.writeFileSync(diffPath, PNG.sync.write(diff));
+
+        resolve(delta)
+    })
 }
 
 export function compareToComp(imgName:string) {
