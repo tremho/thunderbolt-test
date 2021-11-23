@@ -144,6 +144,7 @@ exports.screenshot = screenshot;
  */
 function compare(name) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('test: compare --->>');
         return (0, imageComp_1.compareToComp)(name + ".png");
     });
 }

@@ -3,6 +3,7 @@ const {resemble} = require('@mirzazeyrek/node-resemble-js')
 const path = require('path')
 
 export function compareImages(imgPath1:string, imgPath2:string) {
+    console.log('-->CompareImages ', imgPath1, imgPath2)
     return new Promise(resolve => {
     const api = resemble(imgPath1).compareTo(imgPath2)
         .ignoreAntialiasing()

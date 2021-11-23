@@ -119,6 +119,7 @@ export async function screenshot(name:string) {
  * @param name Name of the screenshot / comp image
  */
 export async function compare(name:string) {
+    console.log('test: compare --->>')
     return compareToComp(name+".png")
 
 }
