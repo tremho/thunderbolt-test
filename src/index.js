@@ -133,6 +133,7 @@ exports.runRemoteTest = runRemoteTest;
  */
 function screenshot(name) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('jove-test is issuing a screenshot call...');
         const ssrt = yield callRemote('screenshot ' + name);
         if (ssrt.substring(0, 4) === 'data') {
             console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name);

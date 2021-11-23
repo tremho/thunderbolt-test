@@ -110,6 +110,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
  * @param name Name to give this image
  */
 export async function screenshot(name:string) {
+    console.log('jove-test is issuing a screenshot call...')
     const ssrt:any =  await callRemote('screenshot '+name)
     if(ssrt.substring(0,4) === 'data') {
         console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
