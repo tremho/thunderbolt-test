@@ -116,13 +116,16 @@ export async function screenshot(name:string) {
 /**
  * Compare a screenshot taken with `screenshot` to a comp file
  * in the `reports/comp` directory of the same name
+ * @param t the Tap object to report through , or null if not using
  * @param name Name of the screenshot / comp image
+ * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
-export async function compare(t:any, name:string) {
+export async function compare(t:any, name:string, passingPct= 0) {
     console.log('test: compare --->>')
-    const data:any = await compareToComp(name+".png", 1)
-    let ok = data?.ok
-    t.ok(ok, 'compare '+name+': ' + data.message)
+    const data:any = await compareToComp(name+".png", passingPct)
+    console.log('data returned', data)
+    let ok = data && data.ok
+    if(t) t.ok(ok, 'compare '+name+': ' + data.message)
     return data
 
 }

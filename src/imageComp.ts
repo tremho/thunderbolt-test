@@ -19,14 +19,15 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
         let tpix = width*height
         let pct = 100*delta/tpix
         let ok = pct <= passingPct
+        console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
         const data = {
             ok,
-            message: (ok ? 'image matches' : 'image does not match') + ` (${pct} delta)`,
+            message: (ok ? 'image matches' : 'image does not match') + ` (${pct}% difference)`,
             percentDiff: pct,
             diffPath
         }
 
-        resolve(delta)
+        resolve(data)
     })
 }
 

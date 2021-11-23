@@ -140,14 +140,18 @@ exports.screenshot = screenshot;
 /**
  * Compare a screenshot taken with `screenshot` to a comp file
  * in the `reports/comp` directory of the same name
+ * @param t the Tap object to report through , or null if not using
  * @param name Name of the screenshot / comp image
+ * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
-function compare(t, name) {
+function compare(t, name, passingPct = 0) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('test: compare --->>');
-        const data = yield (0, imageComp_1.compareToComp)(name + ".png", 1);
-        let ok = data === null || data === void 0 ? void 0 : data.ok;
-        t.ok(ok, 'compare ' + name + ': ' + data.message);
+        const data = yield (0, imageComp_1.compareToComp)(name + ".png", passingPct);
+        console.log('data returned', data);
+        let ok = data && data.ok;
+        if (t)
+            t.ok(ok, 'compare ' + name + ': ' + data.message);
         return data;
     });
 }

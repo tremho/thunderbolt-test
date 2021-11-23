@@ -50,6 +50,8 @@ export declare function screenshot(name: string): Promise<unknown>;
 /**
  * Compare a screenshot taken with `screenshot` to a comp file
  * in the `reports/comp` directory of the same name
+ * @param t the Tap object to report through , or null if not using
  * @param name Name of the screenshot / comp image
+ * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
-export declare function compare(t: any, name: string): Promise<any>;
+export declare function compare(t: any, name: string, passingPct?: number): Promise<any>;
