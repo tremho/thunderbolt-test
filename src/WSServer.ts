@@ -35,7 +35,9 @@ export class WSServer {
                     console.log('server see connection event')
                     this.ws = ws
                     ws.on('message', (message: RawData) => {
+                        console.log('we see a message from client')
                         const str = message.toString()
+                        console.log('it is',str)
                         this.handleResponse(str)
                     })
                     ws.on('close', (code: number) => {
