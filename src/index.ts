@@ -110,12 +110,11 @@ export async function runRemoteTest(title:string, testFunc:any) {
  * @param name Name to give this image
  */
 export async function screenshot(name:string) {
-    return 'data-Not doing it for '+name
-    // console.log('jove-test is issuing a screenshot call...')
-    // const ssrt:any =  await stream.sendDirective('screenshot '+name)
-    // if(ssrt.substring(0,4) === 'data') {
-    //     console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
-    // }
+    console.log('jove-test is issuing a screenshot call...')
+    const ssrt:any =  await stream.sendDirective('screenshot '+name)
+    if(ssrt.substring(0,4) === 'data') {
+        console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+    }
 }
 
 /**

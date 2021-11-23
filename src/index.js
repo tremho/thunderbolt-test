@@ -133,12 +133,11 @@ exports.runRemoteTest = runRemoteTest;
  */
 function screenshot(name) {
     return __awaiter(this, void 0, void 0, function* () {
-        return 'data-Not doing it for ' + name;
-        // console.log('jove-test is issuing a screenshot call...')
-        // const ssrt:any =  await stream.sendDirective('screenshot '+name)
-        // if(ssrt.substring(0,4) === 'data') {
-        //     console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
-        // }
+        console.log('jove-test is issuing a screenshot call...');
+        const ssrt = yield stream.sendDirective('screenshot ' + name);
+        if (ssrt.substring(0, 4) === 'data') {
+            console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name);
+        }
     });
 }
 exports.screenshot = screenshot;
