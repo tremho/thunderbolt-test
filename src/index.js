@@ -153,8 +153,10 @@ function compare(t, name, passingPct = 0) {
         let message = (ok ? 'image matches' : 'image does not match') + ` (${data.percentDiff}% difference)`;
         if (t)
             t.ok(ok, 'compare ' + name + ': ' + message);
-        let res = `${name},${data.percentDiff}`;
-        yield callRemote('compareReport ' + res);
+        if (!ok) {
+            let res = `${name},${data.percentDiff}`;
+            yield callRemote('compareReport ' + res);
+        }
         return data;
     });
 }
