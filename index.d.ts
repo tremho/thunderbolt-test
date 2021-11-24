@@ -54,4 +54,4 @@ export declare function screenshot(name: string): Promise<string>;
  * @param name Name of the screenshot / comp image
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
-export declare function compare(t: any, name: string, passingPct?: number): Promise<string>;
+export declare function compare(t: any, name: string, passingPct?: number): Promise<any>;

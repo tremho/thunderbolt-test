@@ -143,18 +143,17 @@ export async function screenshot(name:string) {
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export async function compare(t:any, name:string, passingPct= 0) {
-    return Promise.resolve('Not Connected')
-    // console.log('test: compare --->>')
-    // const data:any = await compareToComp(name+".png", passingPct)
-    // console.log('data returned', data)
-    // let ok = data && data.ok
-    // let message = (ok ? 'image matches' : 'image does not match') + ` (${data.percentDiff}% difference)`
-    // if(t) t.ok(ok, 'compare '+name+': '+message)
+    console.log('test: compare --->>')
+    const data:any = await compareToComp(name+".png", passingPct)
+    console.log('data returned', data)
+    let ok = data && data.ok
+    let message = (ok ? 'image matches' : 'image does not match') + ` (${data.percentDiff}% difference)`
+    if(t) t.ok(ok, 'compare '+name+': '+message)
     // if(!ok) {
     //     let res = `${name},${data.percentDiff}`
     //     await callRemote('compareReport ' + res)
     // }
-    // return data
+    return data
 
 }
 
