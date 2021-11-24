@@ -14,12 +14,21 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             const img1 = PNG.sync.read(fs.readFileSync(imgPath1));
             const img2 = PNG.sync.read(fs.readFileSync(imgPath2));
             const {width, height} = img1;
-            const diff = new PNG({width, height});
-            const delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+            let tpix = width * height
+            let diff = new PNG({width, height});
+            let delta;
+            let message = ''
+            if(width !== img2.width || height !== img2.height) {
+                const area2 = (img2.width || 0)  * (img2.height || 0)
+                delta = Math.abs(area2 - tpix)
+                diff = img2 // write the mismatched comp image as the diff
+                message = 'images are not the same size'
+            } else {
+                delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+            }
             const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
             fs.writeFileSync(diffPath, PNG.sync.write(diff));
 
-            let tpix = width * height
             let pct: any = 100 * delta / tpix
             let ok = pct <= passingPct
             pct = '' + pct
@@ -30,7 +39,8 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 width,
                 height,
                 countDiff: delta,
-                percentDiff: pct
+                percentDiff: pct,
+                error: message
             }
         }
         catch(e:any) {
