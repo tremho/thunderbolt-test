@@ -87,7 +87,8 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    createCurrentReportFolder()
+    const jplat = process.env['JOVE_PLAT']
+    createCurrentReportFolder(jplat)
     stream = new WSServer()
     let cf = await stream.listen()
     setEndResolver(() => {
@@ -169,9 +170,11 @@ function saveReport(report:string) {
     }
 }
 
-function createCurrentReportFolder() {
+function createCurrentReportFolder(jplat:string) {
     const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     let dt = new Date()
+    let rplat = 'electron'
+    if(jplat === 'android' || jplat === 'ios') rplat = 'mobile'
     let nm = `${month[dt.getMonth()]}-${dt.getDate()}`
     const rootPath = path.resolve('.')
     let cpth:string = path.join(rootPath, 'report', nm)
@@ -185,7 +188,7 @@ function createCurrentReportFolder() {
                 break;
             }
         }
-        const folderPath = path.join(cpth, 'electron')
+        const folderPath = path.join(cpth, rplat)
         fs.mkdirSync(folderPath, {recursive:true})
         let lnpth = path.join(rootPath, 'report', 'latest')
         if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
