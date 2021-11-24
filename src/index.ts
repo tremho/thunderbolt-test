@@ -131,6 +131,8 @@ export async function screenshot(name:string) {
             return "ERR:Bad-rootPath"
         }
     }
+    console.error('data return not recognized', ssrt.substring(0,5))
+    return "ERR:Not-Base64"
 }
 
 /**
