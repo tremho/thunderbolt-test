@@ -36,7 +36,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 diffPath
             }
         }
-        catch(e) {
+        catch(e:any) {
             console.error('error in compare', e)
             data.error = e.toString()
         }
