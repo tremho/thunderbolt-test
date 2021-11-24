@@ -124,6 +124,7 @@ export async function screenshot(name:string) {
                 const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
                 fs.writeFileSync(imgPath, b64, "base64")
                 console.log('image saved as', imgPath)
+                console.log('verified: ', fs.existsSync(imgPath))
                 return imgPath
         } else {
             console.error('rootPath is not recognized', rootPath)
