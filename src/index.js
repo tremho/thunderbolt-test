@@ -107,7 +107,8 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        createCurrentReportFolder();
+        const jplat = process.env['JOVE_PLAT'] || 'unknown';
+        createCurrentReportFolder(jplat);
         stream = new WSServer_1.WSServer();
         let cf = yield stream.listen();
         (0, WSServer_1.setEndResolver)(() => {
@@ -194,9 +195,12 @@ function saveReport(report) {
         console.error('TEST REPORT: Root path not detected at ', rootPath);
     }
 }
-function createCurrentReportFolder() {
+function createCurrentReportFolder(jplat) {
     const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
     let dt = new Date();
+    let rplat = 'electron';
+    if (jplat === 'android' || jplat === 'ios')
+        rplat = 'mobile';
     let nm = `${month[dt.getMonth()]}-${dt.getDate()}`;
     const rootPath = path_1.default.resolve('.');
     let cpth = path_1.default.join(rootPath, 'report', nm);
@@ -210,7 +214,7 @@ function createCurrentReportFolder() {
                 break;
             }
         }
-        const folderPath = path_1.default.join(cpth, 'electron');
+        const folderPath = path_1.default.join(cpth, rplat);
         fs_1.default.mkdirSync(folderPath, { recursive: true });
         let lnpth = path_1.default.join(rootPath, 'report', 'latest');
         if (fs_1.default.existsSync(lnpth))
