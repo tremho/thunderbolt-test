@@ -107,8 +107,6 @@ exports.endTest = endTest;
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
-        const jplat = process.env['JOVE_PLAT'] || 'unknown';
-        createCurrentReportFolder(jplat);
         stream = new WSServer_1.WSServer();
         let cf = yield stream.listen();
         (0, WSServer_1.setEndResolver)(() => {
@@ -139,7 +137,7 @@ function screenshot(name) {
         if (ssrt.substring(0, 4) === 'data') {
             // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
             const rootPath = path_1.default.resolve('..');
-            if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
+            if (fs_1.default.existsSync(path_1.default.join(rootPath, 'report', 'latest'))) {
                 const rptImgPath = path_1.default.join(rootPath, 'report', 'latest', 'images');
                 fs_1.default.mkdirSync(rptImgPath, { recursive: true });
                 const imgPath = path_1.default.join(rptImgPath, name + '.png');
@@ -190,37 +188,6 @@ function saveReport(report) {
         const rptPath = path_1.default.join(folderPath, 'report.html');
         // console.log("TEST REPORT PATH", rptPath)
         fs_1.default.writeFileSync(rptPath, report);
-    }
-    else {
-        console.error('TEST REPORT: Root path not detected at ', rootPath);
-    }
-}
-function createCurrentReportFolder(jplat) {
-    const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-    let dt = new Date();
-    let rplat = 'electron';
-    if (jplat === 'android' || jplat === 'ios')
-        rplat = 'mobile';
-    let nm = `${month[dt.getMonth()]}-${dt.getDate()}`;
-    const rootPath = path_1.default.resolve('.');
-    let cpth = path_1.default.join(rootPath, 'report', nm);
-    // console.log("TEST REPORT ROOT PATH", rootPath)
-    if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
-        let ordinal = 0;
-        let cpth = path_1.default.join(rootPath, 'report', nm);
-        while (++ordinal) {
-            cpth = path_1.default.join(rootPath, 'report', nm, '' + ordinal);
-            if (!fs_1.default.existsSync(cpth)) {
-                break;
-            }
-        }
-        const folderPath = path_1.default.join(cpth, rplat);
-        fs_1.default.mkdirSync(folderPath, { recursive: true });
-        let lnpth = path_1.default.join(rootPath, 'report', 'latest');
-        if (fs_1.default.existsSync(lnpth))
-            fs_1.default.unlinkSync(lnpth);
-        fs_1.default.symlinkSync(folderPath, lnpth);
-        return folderPath;
     }
     else {
         console.error('TEST REPORT: Root path not detected at ', rootPath);

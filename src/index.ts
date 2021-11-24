@@ -87,8 +87,7 @@ export async function endTest(t:any = null) {
  * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
-    const jplat = process.env['JOVE_PLAT'] || 'unknown'
-    createCurrentReportFolder(jplat)
+
     stream = new WSServer()
     let cf = await stream.listen()
     setEndResolver(() => {
@@ -117,14 +116,14 @@ export async function screenshot(name:string) {
         // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
 
         const rootPath = path.resolve('..')
-        if(fs.existsSync(path.join(rootPath, 'package.json'))) {
+        if(fs.existsSync(path.join(rootPath, 'report', 'latest'))) {
 
-            const rptImgPath = path.join(rootPath, 'report', 'latest', 'images')
-            fs.mkdirSync(rptImgPath, {recursive: true})
-            const imgPath = path.join(rptImgPath, name + '.png')
-            const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
-            fs.writeFileSync(imgPath, b64, "base64")
-            return imgPath
+                const rptImgPath = path.join(rootPath, 'report', 'latest', 'images')
+                fs.mkdirSync(rptImgPath, {recursive: true})
+                const imgPath = path.join(rptImgPath, name + '.png')
+                const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
+                fs.writeFileSync(imgPath, b64, "base64")
+                return imgPath
         } else {
             console.error('rootPath is not recognized', rootPath)
             return "ERR:Bad-rootPath"
@@ -170,32 +169,4 @@ function saveReport(report:string) {
     }
 }
 
-function createCurrentReportFolder(jplat:string) {
-    const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-    let dt = new Date()
-    let rplat = 'electron'
-    if(jplat === 'android' || jplat === 'ios') rplat = 'mobile'
-    let nm = `${month[dt.getMonth()]}-${dt.getDate()}`
-    const rootPath = path.resolve('.')
-    let cpth:string = path.join(rootPath, 'report', nm)
-    // console.log("TEST REPORT ROOT PATH", rootPath)
-    if(fs.existsSync(path.join(rootPath, 'package.json'))) {
-        let ordinal = 0
-        let cpth:string = path.join(rootPath, 'report', nm)
-        while (++ordinal) {
-            cpth = path.join(rootPath, 'report', nm, '' + ordinal)
-            if (!fs.existsSync(cpth)) {
-                break;
-            }
-        }
-        const folderPath = path.join(cpth, rplat)
-        fs.mkdirSync(folderPath, {recursive:true})
-        let lnpth = path.join(rootPath, 'report', 'latest')
-        if(fs.existsSync(lnpth)) fs.unlinkSync(lnpth)
-        fs.symlinkSync(folderPath, lnpth)
-        return folderPath
-    } else {
-        console.error('TEST REPORT: Root path not detected at ', rootPath)
-    }
-}
 
