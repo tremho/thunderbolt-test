@@ -15,7 +15,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
         let img1: any = null;
         let img2: any = null;
         let pa = []
-        if(false && fs.existsSync(imgPath1)) {
+        if(fs.existsSync(imgPath1)) {
             pa.push(Jimp.read(imgPath1).then(image => {
                 img1 = image;
             }))
@@ -32,6 +32,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             return resolve(data)
         }
         Promise.resolve(pa).then(() => {
+            data.error = 'we got past image loading'
+            return resolve(data)
+
             let width = img1.width;
             let height = img1.height;
             if (img2.width !== width || img2.height !== height) {
