@@ -12,7 +12,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
         const img2 = PNG.sync.read(fs.readFileSync(imgPath2));
         const {width, height} = img1;
         const diff = new PNG({width, height});
+        console.log('images', img1, img2, diff)
         const delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+        console.log('delta', delta)
         const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.'))+'-diff.png'
         fs.writeFileSync(diffPath, PNG.sync.write(diff));
 
@@ -40,6 +42,8 @@ export function compareToComp(imgName:string, passingPct:number) {
     let plat = 'electron' // todo
 
     let imgPath1 = path.join('report', 'latest', 'images', imgName)
+    let rp = fs.realpathSync(imgPath1)
+    if(rp.indexOf('/mobile/') !== -1) plat = 'mobile'
     let imgPath2 = path.join('report', 'comp', plat, imgName)
     return compareImages(imgPath1, imgPath2, passingPct)
 }
