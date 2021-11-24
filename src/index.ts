@@ -158,7 +158,8 @@ export async function compare(t:any, name:string, passingPct= 0) {
 }
 
 export async function remoteTitle(t:any, title:string) {
-    return callRemote('remoteTitle '+title.replace(/ /g, '+'))
+    await callRemote('remoteTitle '+title.replace(/ /g, '+'))
+    return 'remoteTitle '+title
 }
 
 function saveReport(report:string) {

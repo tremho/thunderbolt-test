@@ -183,7 +183,8 @@ function compare(t, name, passingPct = 0) {
 exports.compare = compare;
 function remoteTitle(t, title) {
     return __awaiter(this, void 0, void 0, function* () {
-        return callRemote('remoteTitle ' + title.replace(/ /g, '+'));
+        yield callRemote('remoteTitle ' + title.replace(/ /g, '+'));
+        return 'remoteTitle ' + title;
     });
 }
 exports.remoteTitle = remoteTitle;
