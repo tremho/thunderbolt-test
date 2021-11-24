@@ -14,7 +14,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
 
         let img1: any = null;
         let img2: any = null;
-        let pa = []
+        let pa:Promise<void>[] = []
         if(fs.existsSync(imgPath1)) {
             pa.push(Jimp.read(imgPath1).then(image => {
                 img1 = image;
@@ -31,7 +31,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             data.error = 'comp image not found!'
             return resolve(data)
         }
-        Promise.resolve(pa).then(() => {
+        Promise.all(pa).then(() => {
             let width = 0
             let height = 0
             try {
@@ -67,7 +67,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             catch(e:any) {
                 data.error = 'err(2): '+e.toString()
                 return resolve(data)
-                
+
             }
             let ok, pct
             try {
