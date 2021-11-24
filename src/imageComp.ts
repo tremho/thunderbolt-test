@@ -1,33 +1,60 @@
+import {JimpType} from "@jimp/core";
 
 const fs = require('fs')
 const path = require('path')
-const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
+import Jimp from 'jimp/es'
 
 export function compareImages(imgPath1:string, imgPath2:string, passingPct:number) {
     console.log('-->CompareImages ', imgPath1, imgPath2)
     return new Promise(resolve => {
 
-        let data:any = {}
+        let data: any = {}
+        let message:string;
 
+        let img1: any = null;
+        let img2: any = null;
+        let pa = []
+        // if(!fs.existsSync(imgPath1) || !fs.existsSync(imgPath2)) {
+        //     message = 'image not available'
+        // }
         try {
-            const img1 = PNG.sync.read(fs.readFileSync(imgPath1));
-            const img2 = PNG.sync.read(fs.readFileSync(imgPath2));
-            const {width, height} = img1;
-            let tpix = width * height
-            let diff = new PNG({width, height});
-            let delta;
-            let message = ''
-            if(width !== img2.width || height !== img2.height) {
-                const area2 = (img2.width || 0)  * (img2.height || 0)
-                delta = Math.abs(area2 - tpix)
-                diff = img2 // write the mismatched comp image as the diff
-                message = 'images are not the same size'
-            } else {
-                delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+            pa.push(Jimp.read(imgPath1).then(image => {
+                img1 = image;
+            }).catch(e => {
+                throw e
+            }))
+            pa.push(Jimp.read(imgPath2).then(image => {
+                img2 = image;
+            }).catch((e:any) => {
+                throw e
+            }))
+        } catch(e:any) {
+            message = e.toString()
+        }
+        Promise.resolve(pa).then(() => {
+            let width = img1.width;
+            let height = img1.height;
+            if (img2.width !== width || img2.height !== height) {
+                message = "Images are not the same size"
+
+                // or
+                // img2.scaleToFit(width,height)
+
+                let dx = Math.abs(img2.width - width)
+                let dy = Math.abs(img2.height - height)
+                if (dx < dy) {
+                    img2.resize(width, Jimp.AUTO)
+                } else {
+                    img2.resize(Jimp.AUTO, height)
+                }
+                img2.crop(0, 0, width, height)
             }
+            let tpix = width * height;
+            let diff = img2.clone()
+            let delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
             const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
-            fs.writeFileSync(diffPath, PNG.sync.write(diff));
+            // fs.writeFileSync(diffPath, PNG.sync.write(diff));
 
             let pct: any = 100 * delta / tpix
             let ok = pct <= passingPct
@@ -42,20 +69,14 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 percentDiff: pct,
                 error: message
             }
-        }
-        catch(e:any) {
-            data.error = e.toString()
-            data.width = data.height = 0
-            data.percentDiff = 100
-        }
-
-        resolve(data)
+            resolve(data)
+        })
     })
 }
 
 export function compareToComp(imgName:string, passingPct:number) {
 
-    let plat = 'electron' // todo
+    let plat = 'electron'
 
     let imgPath1 = path.join('report', 'latest', 'images', imgName)
     let rp = fs.realpathSync(imgPath1)
