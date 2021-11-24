@@ -15,22 +15,21 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
         let img1: any = null;
         let img2: any = null;
         let pa = []
-        // if(!fs.existsSync(imgPath1) || !fs.existsSync(imgPath2)) {
-        //     message = 'image not available'
-        // }
-        try {
+        if(fs.existsSync(imgPath1)) {
             pa.push(Jimp.read(imgPath1).then(image => {
                 img1 = image;
-            }).catch(e => {
-                throw e
             }))
+        } else {
+            data.error = 'image not found!'
+            return resolve(data)
+        }
+        if(fs.existsSync(imgPath2)) {
             pa.push(Jimp.read(imgPath2).then(image => {
                 img2 = image;
-            }).catch((e:any) => {
-                throw e
             }))
-        } catch(e:any) {
-            message = e.toString()
+        } else {
+            data.error = 'comp image not found!'
+            return resolve(data)
         }
         Promise.resolve(pa).then(() => {
             let width = img1.width;
