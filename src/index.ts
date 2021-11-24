@@ -113,7 +113,7 @@ export async function screenshot(name:string) {
     // console.log('jove-test is issuing a screenshot call...')
     const ssrt:any =  await stream.sendDirective('screenshot '+name)
     if(ssrt.substring(0,4) === 'data') {
-        // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+        console.log('we see a base 64 return of', ssrt.substring(0,10)+'...', 'that we could write to a file for', name)
 
         const rootPath = path.resolve('..')
         if(fs.existsSync(path.join(rootPath, 'report', 'latest'))) {
@@ -129,6 +129,7 @@ export async function screenshot(name:string) {
             return "ERR:Bad-rootPath"
         }
     }
+    console.error('data return not recognized', ssrt.substring(0,5))
     return "ERR:Not-Base64"
 }
 

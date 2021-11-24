@@ -135,7 +135,7 @@ function screenshot(name) {
         // console.log('jove-test is issuing a screenshot call...')
         const ssrt = yield stream.sendDirective('screenshot ' + name);
         if (ssrt.substring(0, 4) === 'data') {
-            // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+            console.log('we see a base 64 return of', ssrt.substring(0, 10) + '...', 'that we could write to a file for', name);
             const rootPath = path_1.default.resolve('..');
             if (fs_1.default.existsSync(path_1.default.join(rootPath, 'report', 'latest'))) {
                 const rptImgPath = path_1.default.join(rootPath, 'report', 'latest', 'images');
@@ -150,6 +150,7 @@ function screenshot(name) {
                 return "ERR:Bad-rootPath";
             }
         }
+        console.error('data return not recognized', ssrt.substring(0, 5));
         return "ERR:Not-Base64";
     });
 }
