@@ -133,11 +133,25 @@ exports.runRemoteTest = runRemoteTest;
  */
 function screenshot(name) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('jove-test is issuing a screenshot call...');
+        // console.log('jove-test is issuing a screenshot call...')
         const ssrt = yield stream.sendDirective('screenshot ' + name);
         if (ssrt.substring(0, 4) === 'data') {
-            console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name);
+            // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+            const rootPath = path_1.default.resolve('..');
+            if (fs_1.default.existsSync(path_1.default.join(rootPath, 'package.json'))) {
+                const rptImgPath = path_1.default.join(rootPath, 'report', 'latest', 'images');
+                fs_1.default.mkdirSync(rptImgPath, { recursive: true });
+                const imgPath = path_1.default.join(rptImgPath, name + '.png');
+                const b64 = ssrt.substring(ssrt.indexOf(',') + 1);
+                fs_1.default.writeFileSync(imgPath, b64, "base64");
+                return imgPath;
+            }
+            else {
+                console.error('rootPath is not recognized', rootPath);
+                return "ERR:Bad-rootPath";
+            }
         }
+        return "ERR:Not-Base64";
     });
 }
 exports.screenshot = screenshot;

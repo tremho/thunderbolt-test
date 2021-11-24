@@ -119,14 +119,17 @@ export async function screenshot(name:string) {
         if(fs.existsSync(path.join(rootPath, 'package.json'))) {
 
             const rptImgPath = path.join(rootPath, 'report', 'latest', 'images')
-            fs.mkdirSync(rptImgPath, {recursive:true})
-            const imgPath = path.join(rptImgPath, name+'.png')
-            const b64 = ssrt.substring(ssrt.indexOf(',')+1)
+            fs.mkdirSync(rptImgPath, {recursive: true})
+            const imgPath = path.join(rptImgPath, name + '.png')
+            const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
             fs.writeFileSync(imgPath, b64, "base64")
             return imgPath
-
+        } else {
+            console.error('rootPath is not recognized', rootPath)
+            return "ERR:Bad-rootPath"
+        }
     }
-    return name
+    return "ERR:Not-Base64"
 }
 
 /**
