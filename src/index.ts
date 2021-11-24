@@ -144,8 +144,7 @@ export async function screenshot(name:string) {
  */
 export async function compare(t:any, name:string, passingPct= 0) {
     console.log('test: compare --->>')
-    // const data:any = await compareToComp(name+".png", passingPct)
-    const data:any = {percentDiff: 0, ok:true}
+    const data:any = await compareToComp(name+".png", passingPct)
     console.log('data returned', data)
     let ok = data && data.ok
     let message = (ok ? 'image matches' : 'image does not match') + ` (${data.percentDiff}% difference)`

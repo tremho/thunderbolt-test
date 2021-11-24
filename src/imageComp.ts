@@ -45,5 +45,7 @@ export function compareToComp(imgName:string, passingPct:number) {
     let rp = fs.realpathSync(imgPath1)
     if(rp.indexOf('/mobile/') !== -1) plat = 'mobile'
     let imgPath2 = path.join('report', 'comp', plat, imgName)
+    console.log(imgPath1, imgPath2, passingPct)
+    return  Promise.resolve({percentDiff: 2, ok:false})
     return compareImages(imgPath1, imgPath2, passingPct)
 }
