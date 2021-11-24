@@ -15,9 +15,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             const img2 = PNG.sync.read(fs.readFileSync(imgPath2));
             const {width, height} = img1;
             const diff = new PNG({width, height});
-            console.log('images', img1, img2, diff)
             const delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
-            console.log('delta', delta)
             const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
             fs.writeFileSync(diffPath, PNG.sync.write(diff));
 
@@ -26,19 +24,20 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             let ok = pct <= passingPct
             pct = '' + pct
             pct = pct.substring(0, 8)
-            console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
+            // console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
             data = {
                 ok,
                 width,
                 height,
                 countDiff: delta,
-                percentDiff: pct,
-                diffPath
+                percentDiff: pct
             }
         }
         catch(e:any) {
             console.error('error in compare', e)
             data.error = e.toString()
+            data.width = data.height = 0
+            data.percentDiff = 100
         }
 
         resolve(data)
