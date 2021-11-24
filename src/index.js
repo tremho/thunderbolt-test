@@ -184,7 +184,9 @@ exports.compare = compare;
 function remoteTitle(t, title) {
     return __awaiter(this, void 0, void 0, function* () {
         yield callRemote('remoteTitle ' + title.replace(/ /g, '+'));
-        return 'remoteTitle ' + title;
+        if (t) {
+            t.ok(true, '>remoteTitle: ' + title);
+        }
     });
 }
 exports.remoteTitle = remoteTitle;
