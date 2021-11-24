@@ -14,7 +14,7 @@ export class WSServer {
     private responseResolver:any
 
     listen(port:number = defaultPort):Promise<boolean> {
-        console.log('Test server listening...')
+        // console.log('Test server listening...')
         return new Promise(resolve => {
             let wss
             try {
@@ -32,16 +32,14 @@ export class WSServer {
                     resolve(false)
                 })
                 wss.on('connection', (ws:WebSocket)=> {
-                    console.log('server see connection event')
+                    // console.log('server see connection event')
                     this.ws = ws
                     ws.on('message', (message: RawData) => {
-                        console.log('we see a message from client')
                         const str = message.toString()
-                        console.log('it is',str)
                         this.handleResponse(str)
                     })
                     ws.on('close', (code: number) => {
-                        console.log('Server sees a close event ', code)
+                        // console.log('Server sees a close event ', code)
                         this.responseResolver && this.responseResolver('')
                     })
                     // clear connection gate
@@ -64,7 +62,7 @@ export class WSServer {
         })
     }
     handleResponse(res:string) {
-        console.log('received response ', res)
+        // console.log('received response ', res)
         let n = res.indexOf(':')
         let rcount = Number(res.substring(0, n))
         res = res.substring(n+1)
@@ -81,7 +79,7 @@ export class WSServer {
             }
         }    
         if(ract === 'end') {
-            console.log('Server gets an end response', ans, !!this.ws, !!process)
+            // console.log('Server gets an end response', ans, !!this.ws, !!process)
             if(this.ws) this.ws.close(Number(ans))
             if(endResolver) endResolver(Number(ans))
         }

@@ -143,6 +143,7 @@ function screenshot(name) {
                 const imgPath = path_1.default.join(rptImgPath, name + '.png');
                 const b64 = ssrt.substring(ssrt.indexOf(',') + 1);
                 fs_1.default.writeFileSync(imgPath, b64, "base64");
+                console.log('image saved as', imgPath);
                 return imgPath;
             }
             else {
