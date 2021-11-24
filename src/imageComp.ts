@@ -15,7 +15,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
         let img1: any = null;
         let img2: any = null;
         let pa = []
-        if(fs.existsSync(imgPath1)) {
+        if(false && fs.existsSync(imgPath1)) {
             pa.push(Jimp.read(imgPath1).then(image => {
                 img1 = image;
             }))
