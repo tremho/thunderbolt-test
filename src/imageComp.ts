@@ -34,7 +34,6 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             }
         }
         catch(e:any) {
-            console.error('error in compare', e)
             data.error = e.toString()
             data.width = data.height = 0
             data.percentDiff = 100

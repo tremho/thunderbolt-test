@@ -147,10 +147,10 @@ export async function compare(t:any, name:string, passingPct= 0) {
     const data:any = await compareToComp(name+".png", passingPct)
     console.log('data returned', data)
     let ok = data && data.ok
-    let message = (ok ? 'image matches' : 'image does not match') + ` (${data.percentDiff}% difference)`
+    let message = (ok ? 'image matches' : data.error || 'image does not match'+ ` (${data.percentDiff}% difference)`)
     if(t) t.ok(ok, 'compare '+name+': '+message)
     if(!ok) {
-        let res = `${name},${data.percentDiff}`
+        let res = `${name},${data.percentDiff},${data.error || ''}`
         await callRemote('compareReport ' + res)
     }
     return data
