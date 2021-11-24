@@ -157,6 +157,10 @@ export async function compare(t:any, name:string, passingPct= 0) {
 
 }
 
+export async function remoteTitle(t:any, title:string) {
+    return callRemote('remoteTitle '+title.replace(/ /g, '+'))
+}
+
 function saveReport(report:string) {
     const rootPath = path.resolve('.')
     // console.log("TEST REPORT ROOT PATH", rootPath)

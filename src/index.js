@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compare = exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
+exports.remoteTitle = exports.compare = exports.screenshot = exports.runRemoteTest = exports.endTest = exports.startTest = exports.callRemote = exports.testRemote = void 0;
 const tap_1 = __importDefault(require("tap"));
 const WSServer_1 = require("./WSServer");
 const path_1 = __importDefault(require("path"));
@@ -181,6 +181,12 @@ function compare(t, name, passingPct = 0) {
     });
 }
 exports.compare = compare;
+function remoteTitle(t, title) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return callRemote('remoteTitle ' + title.replace(/ /g, '+'));
+    });
+}
+exports.remoteTitle = remoteTitle;
 function saveReport(report) {
     const rootPath = path_1.default.resolve('.');
     // console.log("TEST REPORT ROOT PATH", rootPath)

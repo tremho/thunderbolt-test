@@ -55,3 +55,4 @@ export declare function screenshot(name: string): Promise<string>;
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export declare function compare(t: any, name: string, passingPct?: number): Promise<any>;
+export declare function remoteTitle(t: any, title: string): Promise<unknown>;
