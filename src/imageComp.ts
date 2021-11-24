@@ -32,36 +32,53 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             return resolve(data)
         }
         Promise.resolve(pa).then(() => {
-            data.error = 'we got past image loading'
-            return resolve(data)
+            let width = 0
+            let height = 0
+            try {
+                width = img1.width;
+                height = img1.height;
+                if (img2.width !== width || img2.height !== height) {
+                    message = "Images are not the same size"
 
-            let width = img1.width;
-            let height = img1.height;
-            if (img2.width !== width || img2.height !== height) {
-                message = "Images are not the same size"
+                    // or
+                    // img2.scaleToFit(width,height)
 
-                // or
-                // img2.scaleToFit(width,height)
-
-                let dx = Math.abs(img2.width - width)
-                let dy = Math.abs(img2.height - height)
-                if (dx < dy) {
-                    img2.resize(width, Jimp.AUTO)
-                } else {
-                    img2.resize(Jimp.AUTO, height)
+                    let dx = Math.abs(img2.width - width)
+                    let dy = Math.abs(img2.height - height)
+                    if (dx < dy) {
+                        img2.resize(width, Jimp.AUTO)
+                    } else {
+                        img2.resize(Jimp.AUTO, height)
+                    }
+                    img2.crop(0, 0, width, height)
                 }
-                img2.crop(0, 0, width, height)
+            } catch(e:any) {
+                data.error = 'err(1): '+e.toString()
+                return resolve(data)
             }
-            let tpix = width * height;
-            let diff = img2.clone()
-            let delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
-            const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
-            // fs.writeFileSync(diffPath, PNG.sync.write(diff));
-
-            let pct: any = 100 * delta / tpix
-            let ok = pct <= passingPct
-            pct = '' + pct
-            pct = pct.substring(0, 8)
+            let tpix, delta
+            try {
+                tpix = width * height;
+                let diff = img2.clone()
+                delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+                const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
+                diff.write(diffPath)
+            }
+            catch(e:any) {
+                data.error = 'err(2): '+e.toString()
+                return resolve(data)
+                
+            }
+            let ok, pct
+            try {
+                pct = 100 * delta / tpix
+                ok = pct <= passingPct
+                pct = '' + pct
+                pct = pct.substring(0, 8)
+            }
+            catch(e:any) {
+                message = 'try3: '+e.toString()
+            }
             // console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
             data = {
                 ok,
