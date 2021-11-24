@@ -115,7 +115,7 @@ export async function screenshot(name:string) {
     if(ssrt.substring(0,4) === 'data') {
         console.log('we see a base 64 return of', ssrt.substring(0,10)+'...', 'that we could write to a file for', name)
 
-        const rootPath = path.resolve('..')
+        const rootPath = path.resolve('.')
         if(fs.existsSync(path.join(rootPath, 'report', 'latest'))) {
 
                 const rptImgPath = path.join(rootPath, 'report', 'latest', 'images')
