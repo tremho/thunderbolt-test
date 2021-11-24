@@ -110,11 +110,23 @@ export async function runRemoteTest(title:string, testFunc:any) {
  * @param name Name to give this image
  */
 export async function screenshot(name:string) {
-    console.log('jove-test is issuing a screenshot call...')
+    // console.log('jove-test is issuing a screenshot call...')
     const ssrt:any =  await stream.sendDirective('screenshot '+name)
     if(ssrt.substring(0,4) === 'data') {
-        console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+        // console.log('we see a base 64 return of', ssrt, 'that we could write to a file for', name)
+
+        const rootPath = path.resolve('..')
+        if(fs.existsSync(path.join(rootPath, 'package.json'))) {
+
+            const rptImgPath = path.join(rootPath, 'report', 'latest', 'images')
+            fs.mkdirSync(rptImgPath, {recursive:true})
+            const imgPath = path.join(rptImgPath, name+'.png')
+            const b64 = ssrt.substring(ssrt.indexOf(',')+1)
+            fs.writeFileSync(imgPath, b64, "base64")
+            return imgPath
+
     }
+    return name
 }
 
 /**
