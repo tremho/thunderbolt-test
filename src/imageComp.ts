@@ -56,21 +56,19 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 data.error = 'err(1): '+e.toString()
                 return resolve(data)
             }
-            let tpix:any, delta:any, p:any
-            try {
+            let tpix:number, delta:number
+            async function part2() {
                 tpix = width * height;
                 let diff = img2.clone()
-                p = diff.getBufferAsync(Jimp.MIME_PNG).then((diffData:any) => {
-                    delta = pixelmatch(img1.data, img2.data, diffData, width, height, {threshold: 0.1});
-                    const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
-                    diff.write(diffPath, () => {console.log('diff file written', diffPath)})
-                })
+                let data1 = await img1.getBufferAsync(Jimp.AUTO)
+                let data2 = await img2.getBufferAsync(Jimp.AUTO)
+                let data3 = await diff.getBufferAsync(Jimp.AUTO)
+                delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
+                const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
+                diff.write(diffPath, () => {console.log('diff file written', diffPath)})
             }
-            catch(e:any) {
-                data.error = 'err(2): '+e.toString()
-                return resolve(data)
-            }
-            Promise.resolve(p).then(() => {
+
+            Promise.resolve(part2()).then(() => {
                 let ok, pct
                 try {
                     pct = 100 * delta / tpix
