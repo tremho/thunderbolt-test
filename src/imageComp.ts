@@ -32,30 +32,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             return resolve(data)
         }
         Promise.all(pa).then(() => {
-            let width = 0
-            let height = 0
-            try {
-                width = img1?.bitmap?.width;
-                height = img1?.bitmap?.height;
-                if (img2?.bitmap?.width !== width || img2?.bitmap?.height !== height) {
-                    message = "Images are not the same size"
+            let width = img1?.bitmap?.width;
+            let height = img1?.bitmap?.height;
 
-                    img2.scaleToFit(width,height)
-
-                    // previous attempt
-                    // let dx = Math.abs(img2?.bitmap?.width - width)
-                    // let dy = Math.abs(img2?.bitmap?.height - height)
-                    // if (dx < dy) {
-                    //     img2.resize(width, Jimp.AUTO)
-                    // } else {
-                    //     img2.resize(Jimp.AUTO, height)
-                    // }
-                    // img2.crop(0, 0, width, height)
-                }
-            } catch(e:any) {
-                data.error = 'err(1): '+e.toString()
-                return resolve(data)
-            }
             let tpix:number, delta:number
             async function part2() {
                 let diff;
@@ -69,6 +48,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                     delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
                 } catch(e:any) {
                     data.error = 'err(2): '+e.toString()
+                    if(data.error.indexOf('image sizes') !== -1) {
+                        data.error += ` (${img1.width}x${img1.height} vs ${img2.width}x${img2.height})`
+                    }
                     return resolve(data)
                 }
                 try {
