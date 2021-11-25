@@ -60,7 +60,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             try {
                 tpix = width * height;
                 let diff = img2.clone()
-                p = diff.getBuffer(Jimp.MIME_PNG).then((diffData:any) => {
+                p = diff.getBufferAsync(Jimp.MIME_PNG).then((diffData:any) => {
                     delta = pixelmatch(img1.data, img2.data, diffData, width, height, {threshold: 0.1});
                     const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
                     diff.write(diffPath, () => {console.log('diff file written', diffPath)})
