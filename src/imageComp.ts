@@ -40,17 +40,17 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 if (img2?.bitmap?.width !== width || img2?.bitmap?.height !== height) {
                     message = "Images are not the same size"
 
-                    // or
-                    // img2.scaleToFit(width,height)
+                    img2.scaleToFit(width,height)
 
-                    let dx = Math.abs(img2?.bitmap?.width - width)
-                    let dy = Math.abs(img2?.bitmap?.height - height)
-                    if (dx < dy) {
-                        img2.resize(width, Jimp.AUTO)
-                    } else {
-                        img2.resize(Jimp.AUTO, height)
-                    }
-                    img2.crop(0, 0, width, height)
+                    // previous attempt
+                    // let dx = Math.abs(img2?.bitmap?.width - width)
+                    // let dy = Math.abs(img2?.bitmap?.height - height)
+                    // if (dx < dy) {
+                    //     img2.resize(width, Jimp.AUTO)
+                    // } else {
+                    //     img2.resize(Jimp.AUTO, height)
+                    // }
+                    // img2.crop(0, 0, width, height)
                 }
             } catch(e:any) {
                 data.error = 'err(1): '+e.toString()
