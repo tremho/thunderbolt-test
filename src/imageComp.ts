@@ -48,7 +48,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                     delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
                 } catch(e:any) {
                     data.error = 'err(2): '+e.toString()
-                    if(data.error.indexOf('image sizes') !== -1) {
+                    if(data.error.toLowerCase().indexOf('sizes do not match') !== -1) {
                         data.error += ` (${img1.width}x${img1.height} vs ${img2.width}x${img2.height})`
                     }
                     return resolve(data)
