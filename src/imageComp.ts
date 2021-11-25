@@ -58,21 +58,26 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             }
             let tpix:number, delta:number
             async function part2() {
+                let diff;
                 try {
                     tpix = width * height;
-                    let diff = img2.clone()
+                    diff = img2.clone()
                     console.log(`images 0=${width}x${height} 1=${img1?.bitmap?.width}x${img1?.bitmap?.height} 2=${img2?.bitmap?.width}x${img2?.bitmap?.height} 3=${diff?.bitmap?.width}x${diff?.bitmap?.height}`)
                     let data1 = img1.bitmap.data; // await img1.getBufferAsync(Jimp.AUTO)
                     let data2 = img2.bitmap.data; // await img2.getBufferAsync(Jimp.AUTO)
                     let data3 = diff.bitmap.data; //await diff.getBufferAsync(Jimp.AUTO)
-                    console.log('calling pixelmatch..')
                     delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
-                    console.log('..and got a delta of ', delta)
-                    const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
-                    diff.write(diffPath, () => {console.log('diff file written', diffPath)})
                 } catch(e:any) {
                     data.error = 'err(2): '+e.toString()
                     return resolve(data)
+                }
+                try {
+                    const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
+                    diff.write(diffPath, () => {
+                        console.log('diff file written', diffPath)
+                    })
+                } catch(e:any) {
+                    message = 'err(2.5): ' + e.toString()
                 }
             }
 
@@ -85,7 +90,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                     pct = pct.substring(0, 8)
                 }
                 catch(e:any) {
-                    message = 'try3: '+e.toString()
+                    message = 'err(3): '+e.toString()
                 }
                 // console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
                 data = {
