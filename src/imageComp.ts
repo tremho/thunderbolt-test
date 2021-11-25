@@ -65,7 +65,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                     let data1 = await img1.getBufferAsync(Jimp.AUTO)
                     let data2 = await img2.getBufferAsync(Jimp.AUTO)
                     let data3 = await diff.getBufferAsync(Jimp.AUTO)
+                    console.log('calling pixelmatch..')
                     delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
+                    console.log('..and got a delta of ', delta)
                     const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
                     diff.write(diffPath, () => {console.log('diff file written', diffPath)})
                 } catch(e:any) {
