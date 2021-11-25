@@ -62,9 +62,9 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                     tpix = width * height;
                     let diff = img2.clone()
                     console.log(`images 0=${width}x${height} 1=${img1?.bitmap?.width}x${img1?.bitmap?.height} 2=${img2?.bitmap?.width}x${img2?.bitmap?.height} 3=${diff?.bitmap?.width}x${diff?.bitmap?.height}`)
-                    let data1 = await img1.getBufferAsync(Jimp.AUTO)
-                    let data2 = await img2.getBufferAsync(Jimp.AUTO)
-                    let data3 = await diff.getBufferAsync(Jimp.AUTO)
+                    let data1 = img1.bitmap.data; // await img1.getBufferAsync(Jimp.AUTO)
+                    let data2 = img2.bitmap.data; // await img2.getBufferAsync(Jimp.AUTO)
+                    let data3 = diff.bitmap.data; //await diff.getBufferAsync(Jimp.AUTO)
                     console.log('calling pixelmatch..')
                     delta = pixelmatch(data1, data2, data3, width, height, {threshold: 0.1});
                     console.log('..and got a delta of ', delta)
