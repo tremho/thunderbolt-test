@@ -56,39 +56,42 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 data.error = 'err(1): '+e.toString()
                 return resolve(data)
             }
-            let tpix, delta
+            let tpix:any, delta:any, p:any
             try {
                 tpix = width * height;
                 let diff = img2.clone()
-                delta = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
-                const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
-                diff.write(diffPath)
+                p = diff.getBuffer(Jimp.MIME_PNG).then((diffData:any) => {
+                    delta = pixelmatch(img1.data, img2.data, diffData, width, height, {threshold: 0.1});
+                    const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
+                    diff.write(diffPath)
+                })
             }
             catch(e:any) {
                 data.error = 'err(2): '+e.toString()
                 return resolve(data)
-
             }
-            let ok, pct
-            try {
-                pct = 100 * delta / tpix
-                ok = pct <= passingPct
-                pct = '' + pct
-                pct = pct.substring(0, 8)
-            }
-            catch(e:any) {
-                message = 'try3: '+e.toString()
-            }
-            // console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
-            data = {
-                ok,
-                width,
-                height,
-                countDiff: delta,
-                percentDiff: pct,
-                error: message
-            }
-            resolve(data)
+            Promise.resolve(p).then(() => {
+                let ok, pct
+                try {
+                    pct = 100 * delta / tpix
+                    ok = pct <= passingPct
+                    pct = '' + pct
+                    pct = pct.substring(0, 8)
+                }
+                catch(e:any) {
+                    message = 'try3: '+e.toString()
+                }
+                // console.log(`${delta} out of ${tpix} pixels differ (${pct}%) in ${width}x${height} image. okay=${ok}`)
+                data = {
+                    ok,
+                    width,
+                    height,
+                    countDiff: delta,
+                    percentDiff: pct,
+                    error: message
+                }
+                resolve(data)
+            })
         })
     })
 }
