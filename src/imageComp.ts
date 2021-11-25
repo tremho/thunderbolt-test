@@ -49,7 +49,11 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 } catch(e:any) {
                     data.error = 'err(2): '+e.toString()
                     if(data.error.toLowerCase().indexOf('sizes do not match') !== -1) {
-                        data.error += ` (${img1.width}x${img1.height} vs ${img2.width}x${img2.height})`
+                        data.error += ` (${img1.bitmap.width}x${img1.bitmap.height} vs ${img2.bitmap.width}x${img2.bitmap.height})`
+                        const diffPath = imgPath1.substring(0, imgPath1.lastIndexOf('.')) + '-diff.png'
+                        diff.write(diffPath, () => {
+                            console.log('comp file written as diff', diffPath)
+                        })
                     }
                     return resolve(data)
                 }
