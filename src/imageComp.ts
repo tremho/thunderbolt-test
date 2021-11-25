@@ -35,16 +35,16 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
             let width = 0
             let height = 0
             try {
-                width = img1.width;
-                height = img1.height;
-                if (img2.width !== width || img2.height !== height) {
+                width = img1?.bitmap?.width;
+                height = img1?.bitmap?.height;
+                if (img2?.bitmap?.width !== width || img2?.bitmap?.height !== height) {
                     message = "Images are not the same size"
 
                     // or
                     // img2.scaleToFit(width,height)
 
-                    let dx = Math.abs(img2.width - width)
-                    let dy = Math.abs(img2.height - height)
+                    let dx = Math.abs(img2?.bitmap?.width - width)
+                    let dy = Math.abs(img2?.bitmap?.height - height)
                     if (dx < dy) {
                         img2.resize(width, Jimp.AUTO)
                     } else {
@@ -61,7 +61,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 try {
                     tpix = width * height;
                     let diff = img2.clone()
-                    console.log(`images 0=${width}x${height} 1=${img1.width}x${img1.height} 2=${img2.width}x${img2.height} 3=${diff.width}x${diff.height}`)
+                    console.log(`images 0=${width}x${height} 1=${img1?.bitmap?.width}x${img1?.bitmap?.height} 2=${img2?.bitmap?.width}x${img2?.bitmap?.height} 3=${diff?.bitmap?.width}x${diff?.bitmap?.height}`)
                     let data1 = await img1.getBufferAsync(Jimp.AUTO)
                     let data2 = await img2.getBufferAsync(Jimp.AUTO)
                     let data3 = await diff.getBufferAsync(Jimp.AUTO)
