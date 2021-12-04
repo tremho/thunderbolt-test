@@ -56,7 +56,14 @@ exports.testRemote = testRemote;
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
         // console.log('callRemote', action)
-        return yield stream.sendDirective(action);
+        let r = yield stream.sendDirective(action);
+        if (typeof r === 'string') {
+            try {
+                r = JSON.parse(r);
+            }
+            catch (e) { }
+        }
+        return r;
     });
 }
 exports.callRemote = callRemote;

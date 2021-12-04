@@ -42,7 +42,13 @@ export async function testRemote(t:any, action:string, description:string, expec
  */
 export async function callRemote(action:string) {
     // console.log('callRemote', action)
-    return  await stream.sendDirective(action)
+    let r =   await stream.sendDirective(action)
+    if(typeof r === 'string') {
+        try {
+            r = JSON.parse(r)
+        } catch(e) {}
+    }
+    return r
 }
 /**
  * Should be called at the top of a test suite, but it's just for symmetry with `endTest`
