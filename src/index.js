@@ -51,7 +51,7 @@ exports.testRemote = testRemote;
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
  * @param action The directive to perform
- * @returns {string} The JSON result of the action, Stringified
+ * @returns {string} The JSON result of the action
  */
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {

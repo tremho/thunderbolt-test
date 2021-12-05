@@ -38,7 +38,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
  * @param action The directive to perform
- * @returns {string} The JSON result of the action, Stringified
+ * @returns {string} The JSON result of the action
  */
 export async function callRemote(action:string) {
     // console.log('callRemote', action)

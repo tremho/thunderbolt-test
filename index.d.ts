@@ -13,7 +13,7 @@ export declare function testRemote(t: any, action: string, description: string, 
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
  * @param action The directive to perform
- * @returns {string} The JSON result of the action, Stringified
+ * @returns {string} The JSON result of the action
  */
 export declare function callRemote(action: string): Promise<unknown>;
 /**
