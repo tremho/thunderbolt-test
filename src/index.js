@@ -55,7 +55,7 @@ exports.testRemote = testRemote;
  */
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log('callRemote', action)
+        console.log('callRemote', action);
         let r = yield stream.sendDirective(action);
         if (typeof r === 'string') {
             try {

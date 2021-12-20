@@ -41,7 +41,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  * @returns {string} The JSON result of the action
  */
 export async function callRemote(action:string) {
-    // console.log('callRemote', action)
+    console.log('callRemote', action)
     let r =   await stream.sendDirective(action)
     if(typeof r === 'string') {
         try {
