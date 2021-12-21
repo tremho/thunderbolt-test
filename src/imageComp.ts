@@ -6,7 +6,7 @@ const pixelmatch = require('pixelmatch')
 import Jimp from 'jimp/es'
 
 export function compareImages(imgPath1:string, imgPath2:string, passingPct:number) {
-    console.log('-->CompareImages ', imgPath1, imgPath2)
+    // console.log('-->CompareImages ', imgPath1, imgPath2)
     return new Promise(resolve => {
 
         let data: any = {}
@@ -41,7 +41,7 @@ export function compareImages(imgPath1:string, imgPath2:string, passingPct:numbe
                 try {
                     tpix = width * height;
                     diff = img2.clone()
-                    console.log(`images 0=${width}x${height} 1=${img1?.bitmap?.width}x${img1?.bitmap?.height} 2=${img2?.bitmap?.width}x${img2?.bitmap?.height} 3=${diff?.bitmap?.width}x${diff?.bitmap?.height}`)
+                    // console.log(`images 0=${width}x${height} 1=${img1?.bitmap?.width}x${img1?.bitmap?.height} 2=${img2?.bitmap?.width}x${img2?.bitmap?.height} 3=${diff?.bitmap?.width}x${diff?.bitmap?.height}`)
                     let data1 = img1.bitmap.data; // await img1.getBufferAsync(Jimp.AUTO)
                     let data2 = img2.bitmap.data; // await img2.getBufferAsync(Jimp.AUTO)
                     let data3 = diff.bitmap.data; //await diff.getBufferAsync(Jimp.AUTO)

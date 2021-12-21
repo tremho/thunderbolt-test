@@ -41,7 +41,7 @@ export async function testRemote(t:any, action:string, description:string, expec
  * @returns {string} The JSON result of the action
  */
 export async function callRemote(action:string) {
-    console.log('callRemote', action)
+    // console.log('callRemote', action)
     let r =   await stream.sendDirective(action)
     if(typeof r === 'string') {
         try {
@@ -119,7 +119,7 @@ export async function screenshot(name:string) {
     // console.log('jove-test is issuing a screenshot call...')
     const ssrt:any =  await stream.sendDirective('screenshot '+name)
     if(ssrt.substring(0,4) === 'data') {
-        console.log('we see a base 64 return of', ssrt.substring(0,10)+'...', 'that we could write to a file for', name)
+        // console.log('we see a base 64 return of', ssrt.substring(0,10)+'...', 'that we could write to a file for', name)
 
         const rootPath = path.resolve('.')
         if(fs.existsSync(path.join(rootPath, 'report', 'latest'))) {
@@ -129,8 +129,8 @@ export async function screenshot(name:string) {
                 const imgPath = path.join(rptImgPath, name + '.png')
                 const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
                 fs.writeFileSync(imgPath, b64, "base64")
-                console.log('image saved as', fs.realpathSync(imgPath))
-                console.log('verified: ', fs.existsSync(imgPath))
+                // console.log('image saved as', fs.realpathSync(imgPath))
+                // console.log('verified: ', fs.existsSync(imgPath))
                 return imgPath
         } else {
             console.error('rootPath is not recognized', rootPath)
@@ -149,9 +149,9 @@ export async function screenshot(name:string) {
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export async function compare(t:any, name:string, passingPct= 0) {
-    console.log('test: compare --->>')
+    // console.log('test: compare --->>')
     const data:any = await compareToComp(name+".png", passingPct)
-    console.log('data returned', data)
+    // console.log('data returned', data)
     let ok = data && data.ok
     let message = (ok ? 'image matches' : data.error || 'image does not match'+ ` (${data.percentDiff}% difference)`)
     if(t) t.ok(ok, 'compare '+name+': '+message)

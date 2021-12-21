@@ -55,7 +55,7 @@ exports.testRemote = testRemote;
  */
 function callRemote(action) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('callRemote', action);
+        // console.log('callRemote', action)
         let r = yield stream.sendDirective(action);
         if (typeof r === 'string') {
             try {
@@ -142,7 +142,7 @@ function screenshot(name) {
         // console.log('jove-test is issuing a screenshot call...')
         const ssrt = yield stream.sendDirective('screenshot ' + name);
         if (ssrt.substring(0, 4) === 'data') {
-            console.log('we see a base 64 return of', ssrt.substring(0, 10) + '...', 'that we could write to a file for', name);
+            // console.log('we see a base 64 return of', ssrt.substring(0,10)+'...', 'that we could write to a file for', name)
             const rootPath = path_1.default.resolve('.');
             if (fs_1.default.existsSync(path_1.default.join(rootPath, 'report', 'latest'))) {
                 const rptImgPath = path_1.default.join(rootPath, 'report', 'latest', 'images');
@@ -150,8 +150,8 @@ function screenshot(name) {
                 const imgPath = path_1.default.join(rptImgPath, name + '.png');
                 const b64 = ssrt.substring(ssrt.indexOf(',') + 1);
                 fs_1.default.writeFileSync(imgPath, b64, "base64");
-                console.log('image saved as', fs_1.default.realpathSync(imgPath));
-                console.log('verified: ', fs_1.default.existsSync(imgPath));
+                // console.log('image saved as', fs.realpathSync(imgPath))
+                // console.log('verified: ', fs.existsSync(imgPath))
                 return imgPath;
             }
             else {
@@ -173,9 +173,9 @@ exports.screenshot = screenshot;
  */
 function compare(t, name, passingPct = 0) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('test: compare --->>');
+        // console.log('test: compare --->>')
         const data = yield (0, imageComp_1.compareToComp)(name + ".png", passingPct);
-        console.log('data returned', data);
+        // console.log('data returned', data)
         let ok = data && data.ok;
         let message = (ok ? 'image matches' : data.error || 'image does not match' + ` (${data.percentDiff}% difference)`);
         if (t)
