@@ -74,7 +74,7 @@ export async function startTest(t:any = null) {
  * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
 export async function endTest(t:any = null) {
-    console.log('endTest called', prevResolve)
+    // console.log('endTest called', prevResolve)
     if(t) t.end()
     let report:any = await stream.sendDirective('getReport')
     report = report.replace(/--/g, '=')
@@ -149,7 +149,7 @@ export async function screenshot(name:string) {
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export async function compare(t:any, name:string, passingPct= 0) {
-    // console.log('test: compare --->>')
+    console.log('test: compare --->>')
     const data:any = await compareToComp(name+".png", passingPct)
     // console.log('data returned', data)
     let ok = data && data.ok
