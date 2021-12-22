@@ -152,7 +152,7 @@ export async function screenshot(t:any, name:string) {
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export async function compare(t:any, name:string, passingPct= 0) {
-    console.log('test: compare --->>')
+    // console.log('test: compare --->>')
     const data:any = await compareToComp(name+".png", passingPct)
     // console.log('data returned', data)
     let ok = data && data.ok

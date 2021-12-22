@@ -14,7 +14,7 @@ export class WSServer {
     private responseResolver:any
 
     listen(port:number = defaultPort):Promise<boolean> {
-        console.log('Test server listening...')
+        // console.log('Test server listening...')
         return new Promise(resolve => {
             let wss
             try {
@@ -32,14 +32,14 @@ export class WSServer {
                     resolve(false)
                 })
                 wss.on('connection', (ws:WebSocket)=> {
-                    console.log('server see connection event')
+                    // console.log('server see connection event')
                     this.ws = ws
                     ws.on('message', (message: RawData) => {
                         const str = message.toString()
                         this.handleResponse(str)
                     })
                     ws.on('close', (code: number) => {
-                        console.log('Server sees a close event ', code)
+                        // console.log('Server sees a close event ', code)
                         this.responseResolver && this.responseResolver('')
                     })
                     // clear connection gate

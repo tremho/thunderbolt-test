@@ -176,7 +176,7 @@ exports.screenshot = screenshot;
  */
 function compare(t, name, passingPct = 0) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('test: compare --->>');
+        // console.log('test: compare --->>')
         const data = yield (0, imageComp_1.compareToComp)(name + ".png", passingPct);
         // console.log('data returned', data)
         let ok = data && data.ok;
