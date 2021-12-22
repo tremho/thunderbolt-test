@@ -115,7 +115,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
  *
  * @param name Name to give this image
  */
-export async function screenshot(name:string) {
+export async function screenshot(t:any, name:string) {
     // console.log('jove-test is issuing a screenshot call...')
     const ssrt:any =  await stream.sendDirective('screenshot '+name)
     if(ssrt.substring(0,4) === 'data') {
@@ -129,14 +129,17 @@ export async function screenshot(name:string) {
                 const imgPath = path.join(rptImgPath, name + '.png')
                 const b64 = ssrt.substring(ssrt.indexOf(',') + 1)
                 fs.writeFileSync(imgPath, b64, "base64")
+                t.ok(true, 'screenshot '+name+' taken')
                 // console.log('image saved as', fs.realpathSync(imgPath))
                 // console.log('verified: ', fs.existsSync(imgPath))
                 return imgPath
         } else {
+            t.ok(false, 'screenshot '+name+' fails - invalid root directory')
             console.error('rootPath is not recognized', rootPath)
             return "ERR:Bad-rootPath"
         }
     }
+    t.ok(false, 'screenshot '+name+' fails - data return not recognized')
     console.error('data return not recognized', ssrt.substring(0,5))
     return "ERR:Not-Base64"
 }
