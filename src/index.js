@@ -200,11 +200,24 @@ function remoteTitle(t, title) {
     });
 }
 exports.remoteTitle = remoteTitle;
+function aahTimeout(pxprompt, choices, timeoutSeconds) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let topromise = new Promise((resolve, reject) => { setTimeout(reject, timeoutSeconds * 1000); });
+        let callpromise = callRemote('askAHuman' + pxprompt + ' ' + choices);
+        let resp;
+        yield Promise.race([callpromise, topromise]).catch((e) => {
+            // do nothing on timeout. response will be undefined.
+        }).then(r => {
+            resp = r;
+        });
+        return resp;
+    });
+}
 function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
-        let resp = yield callRemote('askAHuman ' + px + ' ' + choices);
+        let resp = yield aahTimeout(px, choices, 6);
         console.log('response is ', resp);
         let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`;
         t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);

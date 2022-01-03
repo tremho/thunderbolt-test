@@ -173,10 +173,22 @@ export async function remoteTitle(t:any, title:string) {
     }
 }
 
+async function aahTimeout(pxprompt:string, choices:string, timeoutSeconds:number) {
+    let topromise = new Promise((resolve,reject) => {setTimeout(reject, timeoutSeconds*1000)})
+    let callpromise = callRemote('askAHuman' + pxprompt+ ' '+choices)
+    let resp
+    await Promise.race([callpromise, topromise]).catch((e:any) => {
+      // do nothing on timeout. response will be undefined.
+    }).then( r => {
+        resp = r
+    })
+    return resp
+}
+
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string) {
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
-    let resp = await callRemote('askAHuman '+px+' '+choices)
+    let resp = await aahTimeout(px, choices, 6)
     console.log('response is ', resp)
     let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
     t.ok(resp==expect, 'askAHuman: '+prompt+exprt)
