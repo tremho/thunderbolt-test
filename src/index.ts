@@ -173,6 +173,11 @@ export async function remoteTitle(t:any, title:string) {
     }
 }
 
+export async function askAHuman(t:any, prompt:string, choices:string) {
+    await callRemote('askAHuman "'+prompt+'" '+choices)
+    t.ok(true, 'askAHuman')
+}
+
 function saveReport(report:string) {
     const rootPath = path.resolve('.')
     // console.log("TEST REPORT ROOT PATH", rootPath)
