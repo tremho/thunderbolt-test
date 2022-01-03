@@ -221,7 +221,8 @@ function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
-        let resp = yield aahTimeout(px, choices, 6);
+        // let resp = await aahTimeout(px, choices, 6)
+        let resp = yield stream.sendDirective('askAHuman' + px + ' ' + choices);
         console.log('response is ', resp);
         let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`;
         t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
