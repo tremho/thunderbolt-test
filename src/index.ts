@@ -174,15 +174,12 @@ export async function remoteTitle(t:any, title:string) {
 }
 
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string) {
-    let ca = choices.split(',')
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
     let resp = await callRemote('askAHuman '+px+' '+choices)
-    let xn = ca.indexOf(expect)
-    let cc = ca[resp as number]
-    console.log('response is ', resp, cc)
-    let exprt = (resp == xn) ? ` [${expect}]` : ` [${cc}, expected ${expect}]`
-    t.ok(resp==xn, 'askAHuman: '+prompt+exprt)
+    console.log('response is ', resp)
+    let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
+    t.ok(resp==expect, 'askAHuman: '+prompt+exprt)
 }
 
 function saveReport(report:string) {
