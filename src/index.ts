@@ -193,7 +193,7 @@ export async function askAHuman(t:any, prompt:string, choices:string, expect:str
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
     // let resp = await aahTimeout(px, choices, 6)
-    let resp = await stream.sendDirective('askAHuman'+px+' '+choices)
+    let resp = await callRemote('askAHuman '+px+' '+choices)
     console.log('response is ', resp)
     let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
     t.ok(resp==expect, 'askAHuman: '+prompt+exprt)
