@@ -177,7 +177,9 @@ export async function askAHuman(t:any, prompt:string, choices:string, expect:str
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
     let resp = await callRemote('askAHuman '+px+' '+choices)
-    t.ok(resp==expect, 'askAHuman: '+prompt)
+    let xn = choices.indexOf(expect)
+    let exprt = (resp == xn) ? `[${expect}]` : `[${choices[resp as number]}, expected ${expect}]`
+    t.ok(resp==expect, 'askAHuman: '+prompt+exprt)
 }
 
 function saveReport(report:string) {

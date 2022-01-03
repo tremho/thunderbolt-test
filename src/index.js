@@ -205,7 +205,9 @@ function askAHuman(t, prompt, choices, expect) {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
         let resp = yield callRemote('askAHuman ' + px + ' ' + choices);
-        t.ok(resp == expect, 'askAHuman: ' + prompt);
+        let xn = choices.indexOf(expect);
+        let exprt = (resp == xn) ? `[${expect}]` : `[${choices[resp]}, expected ${expect}]`;
+        t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
     });
 }
 exports.askAHuman = askAHuman;
