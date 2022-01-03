@@ -175,7 +175,7 @@ export async function remoteTitle(t:any, title:string) {
 
 async function aahTimeout(pxprompt:string, choices:string, timeoutSeconds:number) {
     let topromise = new Promise((resolve,reject) => {setTimeout(reject, timeoutSeconds*1000)})
-    let callpromise = callRemote('askAHuman' + pxprompt+ ' '+choices)
+    let callpromise = stream.sendDirective('askAHuman' + pxprompt+ ' '+choices)
     let resp
     console.log('racing aahTimeout')
     await Promise.race([callpromise, topromise]).catch((e:any) => {
