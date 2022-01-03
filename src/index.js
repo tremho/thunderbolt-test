@@ -202,12 +202,15 @@ function remoteTitle(t, title) {
 exports.remoteTitle = remoteTitle;
 function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
+        let ca = choices.split(',');
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
         let resp = yield callRemote('askAHuman ' + px + ' ' + choices);
-        let xn = choices.indexOf(expect);
-        let exprt = (resp == xn) ? `[${expect}]` : `[${choices[resp]}, expected ${expect}]`;
-        t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
+        let xn = ca.indexOf(expect);
+        let cc = ca[resp];
+        console.log('response is ', resp, cc);
+        let exprt = (resp == xn) ? ` [${expect}]` : ` [${cc}, expected ${expect}]`;
+        t.ok(resp == xn, 'askAHuman: ' + prompt + exprt);
     });
 }
 exports.askAHuman = askAHuman;
