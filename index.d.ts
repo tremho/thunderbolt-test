@@ -56,4 +56,4 @@ export declare function screenshot(t: any, name: string): Promise<string>;
  */
 export declare function compare(t: any, name: string, passingPct?: number): Promise<any>;
 export declare function remoteTitle(t: any, title: string): Promise<void>;
-export declare function askAHuman(t: any, prompt: string, choices: string): Promise<void>;
+export declare function askAHuman(t: any, prompt: string, choices: string, expect: string): Promise<void>;

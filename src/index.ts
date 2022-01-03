@@ -173,9 +173,9 @@ export async function remoteTitle(t:any, title:string) {
     }
 }
 
-export async function askAHuman(t:any, prompt:string, choices:string) {
+export async function askAHuman(t:any, prompt:string, choices:string, expect:string) {
     await callRemote('askAHuman "'+prompt+'" '+choices)
-    t.ok(true, 'askAHuman')
+    t.ok(true, 'askAHuman: '+prompt)
 }
 
 function saveReport(report:string) {

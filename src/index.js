@@ -200,10 +200,10 @@ function remoteTitle(t, title) {
     });
 }
 exports.remoteTitle = remoteTitle;
-function askAHuman(t, prompt, choices) {
+function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
         yield callRemote('askAHuman "' + prompt + '" ' + choices);
-        t.ok(true, 'askAHuman');
+        t.ok(true, 'askAHuman: ' + prompt);
     });
 }
 exports.askAHuman = askAHuman;
