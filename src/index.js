@@ -205,11 +205,15 @@ function aahTimeout(pxprompt, choices, timeoutSeconds) {
         let topromise = new Promise((resolve, reject) => { setTimeout(reject, timeoutSeconds * 1000); });
         let callpromise = callRemote('askAHuman' + pxprompt + ' ' + choices);
         let resp;
+        console.log('racing aahTimeout');
         yield Promise.race([callpromise, topromise]).catch((e) => {
+            console.error('caught timeout', e);
             // do nothing on timeout. response will be undefined.
         }).then(r => {
+            console.log('response is ', r);
             resp = r;
         });
+        console.log('returning', resp);
         return resp;
     });
 }
