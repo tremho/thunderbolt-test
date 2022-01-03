@@ -203,7 +203,7 @@ exports.remoteTitle = remoteTitle;
 function aahTimeout(pxprompt, choices, timeoutSeconds) {
     return __awaiter(this, void 0, void 0, function* () {
         let topromise = new Promise((resolve, reject) => { setTimeout(reject, timeoutSeconds * 1000); });
-        let callpromise = stream.sendDirective('askAHuman' + pxprompt + ' ' + choices);
+        let callpromise = stream.sendDirective('askAHuman ' + pxprompt + ' ' + choices);
         let resp;
         console.log('racing aahTimeout');
         yield Promise.race([callpromise, topromise]).catch((e) => {
@@ -221,8 +221,7 @@ function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
-        // let resp = await aahTimeout(px, choices, 6)
-        let resp = yield callRemote('askAHuman ' + px + ' ' + choices);
+        let resp = yield aahTimeout(px, choices, 6);
         console.log('response is ', resp);
         let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`;
         t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
