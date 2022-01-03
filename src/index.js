@@ -202,8 +202,8 @@ function remoteTitle(t, title) {
 exports.remoteTitle = remoteTitle;
 function askAHuman(t, prompt, choices, expect) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield callRemote('askAHuman "' + prompt + '" ' + choices);
-        t.ok(true, 'askAHuman: ' + prompt);
+        let resp = yield callRemote('askAHuman "' + prompt + '" ' + choices);
+        t.ok(resp == expect, 'askAHuman: ' + prompt);
     });
 }
 exports.askAHuman = askAHuman;
