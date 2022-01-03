@@ -174,7 +174,9 @@ export async function remoteTitle(t:any, title:string) {
 }
 
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string) {
-    let resp = await callRemote('askAHuman "'+prompt+'" '+choices)
+    let px = prompt.replace(/\+/g, '%plus%')
+    px = px.replace(/ /g, '+')
+    let resp = await callRemote('askAHuman '+px+' '+choices)
     t.ok(resp==expect, 'askAHuman: '+prompt)
 }
 
