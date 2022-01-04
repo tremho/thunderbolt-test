@@ -217,11 +217,11 @@ function aahTimeout(pxprompt, choices, timeoutSeconds) {
         return resp;
     });
 }
-function askAHuman(t, prompt, choices, expect) {
+function askAHuman(t, prompt, choices, expect, timeoutSeconds = 30) {
     return __awaiter(this, void 0, void 0, function* () {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
-        let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + 6);
+        let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + timeoutSeconds);
         console.log('response is ', resp);
         let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`;
         t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
