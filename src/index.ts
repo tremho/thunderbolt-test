@@ -194,6 +194,7 @@ export async function askAHuman(t:any, prompt:string, choices:string, expect:str
     px = px.replace(/ /g, '+')
     let resp = await callRemote('askAHuman '+px+ ' '+choices +' '+ timeoutSeconds)
     console.log('response is ', resp)
+    if(resp === 'undefined') resp = undefined;
     let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
                      : ` [timed out]`
     t.ok(resp===expect || resp===undefined, 'askAHuman: '+prompt+exprt)
