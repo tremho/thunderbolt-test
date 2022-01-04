@@ -26,10 +26,10 @@ let prevResolve;
 /**
  * Transact a single remote test action at the connected app client
  *
- * @param t The tap instance passed into test execution function from `runRemoteTest`, or null to skip tap
- * @param action The directive to perform
- * @param description A description of this test action
- * @param expected The expected return result of this test action
+ * @param {TAP} t The tap instance passed into test execution function from `runRemoteTest`, or null to skip tap
+ * @param {string} action The directive to perform
+ * @param {string} description A description of this test action
+ * @param {string} expected The expected return result of this test action
  *
  * @return {boolean} the result of the test result matching expected; may be ignored.
  */
@@ -50,7 +50,7 @@ exports.testRemote = testRemote;
 /**
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
- * @param action The directive to perform
+ * @param {string} action The directive to perform
  * @returns {string} The JSON result of the action
  */
 function callRemote(action) {
@@ -70,7 +70,7 @@ exports.callRemote = callRemote;
 /**
  * Should be called at the top of a test suite, but it's just for symmetry with `endTest`
  * In this version, nothing is actually sent to the server.
- * @param t The tap instance, if using tap
+ * @param {TAP} t The tap instance, if using tap
  *
  * return {boolean} true if stream is ready.
  */
@@ -90,7 +90,7 @@ exports.startTest = startTest;
 /**
  * Call when all the tests are complete.  The client will continue with its disposition after that, either exiting, or
  * continuing to run.  This should be the end of any remote testing, regardless.
- * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
+ * @param {TAP} t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
 function endTest(t = null) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -109,8 +109,8 @@ exports.endTest = endTest;
  *
  * At this point the client has been launched, possibly under appium
  *
- * @param title Title of this test that will appear on the report
- * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
+ * @param {string} title Title of this test that will appear on the report
+ * @param {Function} testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 function runRemoteTest(title, testFunc) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -135,7 +135,7 @@ exports.runRemoteTest = runRemoteTest;
  *
  * Image will be saved as a PNG in the appropriate report directory
  *
- * @param name Name to give this image
+ * @param {string} name Name to give this image
  */
 function screenshot(t, name) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -170,8 +170,8 @@ exports.screenshot = screenshot;
 /**
  * Compare a screenshot taken with `screenshot` to a comp file
  * in the `reports/comp` directory of the same name
- * @param t the Tap object to report through , or null if not using
- * @param name Name of the screenshot / comp image
+ * @param {TAP} t the Tap object to report through , or null if not using
+ * @param {string} name Name of the screenshot / comp image
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 function compare(t, name, passingPct = 0) {
@@ -191,6 +191,11 @@ function compare(t, name, passingPct = 0) {
     });
 }
 exports.compare = compare;
+/**
+ * Assigns a title for this test that will appear on test report.
+ * @param {TAP} [t]  The TAP object, if using and want report on this operation
+ * @param {string} title Title of this test series
+ */
 function remoteTitle(t, title) {
     return __awaiter(this, void 0, void 0, function* () {
         yield callRemote('remoteTitle ' + title.replace(/ /g, '+'));
@@ -200,29 +205,23 @@ function remoteTitle(t, title) {
     });
 }
 exports.remoteTitle = remoteTitle;
-function aahTimeout(pxprompt, choices, timeoutSeconds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let topromise = new Promise((resolve, reject) => { setTimeout(reject, timeoutSeconds * 1000); });
-        let callpromise = stream.sendDirective('askAHuman ' + pxprompt + ' ' + choices);
-        let resp;
-        console.log('racing aahTimeout');
-        yield Promise.race([callpromise, topromise]).catch((e) => {
-            console.error('caught timeout', e);
-            // do nothing on timeout. response will be undefined.
-        }).then(r => {
-            console.log('response is ', r);
-            resp = r;
-        });
-        console.log('returning', resp);
-        return resp;
-    });
-}
+/**
+ * Prsent a prompt dialog to the user asking a question with given button choices, and the expected response for all OK.
+ * Test passes if response is the expected response, or if there is a timeout.
+ * If no response is made within the timeout period (30 seconds default), the dialog is dismissed and the test passses.
+ *
+ * @param {TAP} t The TAP object
+ * @param {string} prompt prompt to the user
+ * @param {string} choices comma-delimited set of choice buttons to present
+ * @param {string} expect the response expected for passing
+ * @param {number} [timeoutSeconds] Seconds until timeout (default is 30)
+ */
 function askAHuman(t, prompt, choices, expect, timeoutSeconds = 30) {
     return __awaiter(this, void 0, void 0, function* () {
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
         let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + timeoutSeconds);
-        console.log('response is ', resp);
+        // console.log('response is ', resp)
         if (resp === 'undefined')
             resp = undefined;
         let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`

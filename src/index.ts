@@ -17,10 +17,10 @@ let prevResolve:any
 /**
  * Transact a single remote test action at the connected app client
  *
- * @param t The tap instance passed into test execution function from `runRemoteTest`, or null to skip tap
- * @param action The directive to perform
- * @param description A description of this test action
- * @param expected The expected return result of this test action
+ * @param {TAP} t The tap instance passed into test execution function from `runRemoteTest`, or null to skip tap
+ * @param {string} action The directive to perform
+ * @param {string} description A description of this test action
+ * @param {string} expected The expected return result of this test action
  *
  * @return {boolean} the result of the test result matching expected; may be ignored.
  */
@@ -37,7 +37,7 @@ export async function testRemote(t:any, action:string, description:string, expec
 /**
  * similar to `testRemote`, but simply calls the action and returns the result without submitting to test
  *
- * @param action The directive to perform
+ * @param {string} action The directive to perform
  * @returns {string} The JSON result of the action
  */
 export async function callRemote(action:string) {
@@ -53,7 +53,7 @@ export async function callRemote(action:string) {
 /**
  * Should be called at the top of a test suite, but it's just for symmetry with `endTest`
  * In this version, nothing is actually sent to the server.
- * @param t The tap instance, if using tap
+ * @param {TAP} t The tap instance, if using tap
  *
  * return {boolean} true if stream is ready.
  */
@@ -71,7 +71,7 @@ export async function startTest(t:any = null) {
 /**
  * Call when all the tests are complete.  The client will continue with its disposition after that, either exiting, or
  * continuing to run.  This should be the end of any remote testing, regardless.
- * @param t The tap instance, if using tap.  Will signal the end on this tap instance.
+ * @param {TAP} t The tap instance, if using tap.  Will signal the end on this tap instance.
  */
 export async function endTest(t:any = null) {
     // console.log('endTest called', prevResolve)
@@ -89,8 +89,8 @@ export async function endTest(t:any = null) {
  *
  * At this point the client has been launched, possibly under appium
  *
- * @param title Title of this test that will appear on the report
- * @param testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
+ * @param {string} title Title of this test that will appear on the report
+ * @param {Function} testFunc The function from the test script that conducts the test with `startTest` then a series of `testRemote` directives, then an `endTest`
  */
 export async function runRemoteTest(title:string, testFunc:any) {
 
@@ -113,7 +113,7 @@ export async function runRemoteTest(title:string, testFunc:any) {
  *
  * Image will be saved as a PNG in the appropriate report directory
  *
- * @param name Name to give this image
+ * @param {string} name Name to give this image
  */
 export async function screenshot(t:any, name:string) {
     // console.log('jove-test is issuing a screenshot call...')
@@ -147,8 +147,8 @@ export async function screenshot(t:any, name:string) {
 /**
  * Compare a screenshot taken with `screenshot` to a comp file
  * in the `reports/comp` directory of the same name
- * @param t the Tap object to report through , or null if not using
- * @param name Name of the screenshot / comp image
+ * @param {TAP} t the Tap object to report through , or null if not using
+ * @param {string} name Name of the screenshot / comp image
  * @param [passingPct] Percentage of pixels that can be different and still pass (default = 0)
  */
 export async function compare(t:any, name:string, passingPct= 0) {
@@ -166,6 +166,11 @@ export async function compare(t:any, name:string, passingPct= 0) {
 
 }
 
+/**
+ * Assigns a title for this test that will appear on test report.
+ * @param {TAP} [t]  The TAP object, if using and want report on this operation
+ * @param {string} title Title of this test series
+ */
 export async function remoteTitle(t:any, title:string) {
     await callRemote('remoteTitle '+title.replace(/ /g, '+'))
     if(t) {
@@ -173,27 +178,22 @@ export async function remoteTitle(t:any, title:string) {
     }
 }
 
-async function aahTimeout(pxprompt:string, choices:string, timeoutSeconds:number) {
-    let topromise = new Promise((resolve,reject) => {setTimeout(reject, timeoutSeconds*1000)})
-    let callpromise = stream.sendDirective('askAHuman ' + pxprompt+ ' '+choices)
-    let resp
-    console.log('racing aahTimeout')
-    await Promise.race([callpromise, topromise]).catch((e:any) => {
-        console.error('caught timeout', e)
-      // do nothing on timeout. response will be undefined.
-    }).then( r => {
-        console.log('response is ', r)
-        resp = r
-    })
-    console.log('returning', resp)
-    return resp
-}
-
+/**
+ * Prsent a prompt dialog to the user asking a question with given button choices, and the expected response for all OK.
+ * Test passes if response is the expected response, or if there is a timeout.
+ * If no response is made within the timeout period (30 seconds default), the dialog is dismissed and the test passses.
+ *
+ * @param {TAP} t The TAP object
+ * @param {string} prompt prompt to the user
+ * @param {string} choices comma-delimited set of choice buttons to present
+ * @param {string} expect the response expected for passing
+ * @param {number} [timeoutSeconds] Seconds until timeout (default is 30)
+ */
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string, timeoutSeconds=30) {
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
     let resp = await callRemote('askAHuman '+px+ ' '+choices +' '+ timeoutSeconds)
-    console.log('response is ', resp)
+    // console.log('response is ', resp)
     if(resp === 'undefined') resp = undefined;
     let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
                      : ` [timed out]`
