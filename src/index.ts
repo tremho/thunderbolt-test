@@ -192,7 +192,7 @@ async function aahTimeout(pxprompt:string, choices:string, timeoutSeconds:number
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string) {
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
-    let resp = await aahTimeout(px, choices, 6)
+    let resp = await callRemote('askAHuman '+px+ ' '+choices +' '+ 6)
     console.log('response is ', resp)
     let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
     t.ok(resp==expect, 'askAHuman: '+prompt+exprt)
