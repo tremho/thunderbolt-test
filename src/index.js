@@ -218,10 +218,11 @@ exports.remoteTitle = remoteTitle;
  */
 function askAHuman(t, prompt, choices, expect, timeoutSeconds = 30) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>> Ask a Human");
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
         let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + timeoutSeconds);
-        // console.log('response is ', resp)
+        console.log('   response is ', resp);
         if (resp === 'undefined')
             resp = undefined;
         let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`

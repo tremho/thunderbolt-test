@@ -190,10 +190,11 @@ export async function remoteTitle(t:any, title:string) {
  * @param {number} [timeoutSeconds] Seconds until timeout (default is 30)
  */
 export async function askAHuman(t:any, prompt:string, choices:string, expect:string, timeoutSeconds=30) {
+    console.log(">>> Ask a Human")
     let px = prompt.replace(/\+/g, '%plus%')
     px = px.replace(/ /g, '+')
     let resp = await callRemote('askAHuman '+px+ ' '+choices +' '+ timeoutSeconds)
-    // console.log('response is ', resp)
+    console.log('   response is ', resp)
     if(resp === 'undefined') resp = undefined;
     let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
                      : ` [timed out]`
