@@ -223,8 +223,9 @@ function askAHuman(t, prompt, choices, expect, timeoutSeconds = 30) {
         px = px.replace(/ /g, '+');
         let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + timeoutSeconds);
         console.log('response is ', resp);
-        let exprt = (resp == expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`;
-        t.ok(resp == expect, 'askAHuman: ' + prompt + exprt);
+        let exprt = resp ? (resp === expect) ? ` [${resp}]` : ` [${resp}, expected ${expect}]`
+            : ` [timed out]`;
+        t.ok(resp === expect || resp === undefined, 'askAHuman: ' + prompt + exprt);
     });
 }
 exports.askAHuman = askAHuman;
