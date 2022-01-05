@@ -73,3 +73,8 @@ export declare function remoteTitle(t: any, title: string): Promise<void>;
  * @param {number} [timeoutSeconds] Seconds until timeout (default is 30)
  */
 export declare function askAHuman(t: any, prompt: string, choices: string, expect: string, timeoutSeconds?: number): Promise<void>;
+/**
+ * Waits for the given time, in milliseconds
+ * @param millis
+ */
+export declare function wait(millis: number): Promise<unknown>;

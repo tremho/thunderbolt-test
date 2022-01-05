@@ -201,6 +201,15 @@ export async function askAHuman(t:any, prompt:string, choices:string, expect:str
     t.ok(resp===expect || resp===undefined, 'askAHuman: '+prompt+exprt)
 }
 
+
+/**
+ * Waits for the given time, in milliseconds
+ * @param millis
+ */
+export async function wait(millis:number) {
+    return new Promise(resolve => {setTimeout(resolve, millis)})
+}
+
 function saveReport(report:string) {
     const rootPath = path.resolve('.')
     // console.log("TEST REPORT ROOT PATH", rootPath)
