@@ -221,7 +221,7 @@ function askAHuman(t, prompt, choices, expect, timeoutSeconds = 30) {
         console.log(">>> Ask a Human");
         let px = prompt.replace(/\+/g, '%plus%');
         px = px.replace(/ /g, '+');
-        let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + timeoutSeconds);
+        let resp = yield callRemote('askAHuman ' + px + ' ' + choices + ' ' + expect + ' ' + timeoutSeconds);
         console.log('   response is ', resp);
         if (resp === 'undefined')
             resp = undefined;
